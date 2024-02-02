@@ -1,0 +1,105 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\signalRChatMVC.bundle.scp.css",
+      "PackagePath": "staticwebassets\\signalRChatMVC.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\css\\app.min.css",
+      "PackagePath": "staticwebassets\\css\\app.min.css"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\axios\\axios.js",
+      "PackagePath": "staticwebassets\\lib\\axios\\axios.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\axios\\axios.map",
+      "PackagePath": "staticwebassets\\lib\\axios\\axios.map"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\axios\\axios.min.js",
+      "PackagePath": "staticwebassets\\lib\\axios\\axios.min.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\axios\\axios.min.map",
+      "PackagePath": "staticwebassets\\lib\\axios\\axios.min.map"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\yanick\\RiderProjects\\signalRchat.Learning\\signalRChatMVC\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.signalRChatMVC.props",
+      "PackagePath": "build\\signalRChatMVC.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.signalRChatMVC.props",
+      "PackagePath": "buildMultiTargeting\\signalRChatMVC.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.signalRChatMVC.props",
+      "PackagePath": "buildTransitive\\signalRChatMVC.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.signalRChatMVC.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

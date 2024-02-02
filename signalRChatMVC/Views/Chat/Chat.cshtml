@@ -1,0 +1,100 @@
+@model List<signalRChatMVC.ViewModels.MessageViewModel>
+
+@{
+    ViewData["Title"] = "ChatRoom";
+}
+
+<h1 id="@ViewBag.RoomName">@ViewBag.RoomName</h1>
+<div class="row p-1">
+    <div class="col-6">
+        <ul id="messagesList">
+            @foreach (var message in Model)
+            {
+                <li>@message.Sender : @message.Content : @message.Timestamp</li>
+            }
+
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <form asp-action="Chat" asp-controller="Chat" method="post">
+        <div class="row p-1">
+            <div class="col-1">User</div>
+            <div class="col-5">
+                <p type="text"  >@User.Identity.Name</p>
+                <input hidden="hidden" type="text" id="sender" value="@User.Identity.Name"/>
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-1">Message</div>
+            <div class="col-5">
+                <input  type="text" class="w-100" id="messageInput"/>
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6 text-end">
+                <input type="button"  id="sendButton" value="Send Message" asp-a/>
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6">
+                <hr/>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+        let roomName ='@ViewBag.RoomName';
+            const connection = new signalR.HubConnectionBuilder()
+              .withUrl(`/chat/ChatRooms/${roomName}`)
+              .build();
+            
+            connection.start()
+              .then(() => {
+                  console.log('Connected to the SignalR hub');
+                  console.log(`Connection ID: ${connection.connectionId}`);
+                  console.log(`Connected to room: ${roomName}`);
+                  console.log(`baseUrl: ${connection.baseUrl}`);
+                  connection.invoke("AddToGroup", roomName)  //JoinGroup is C# method name
+                    .catch(err => {
+                        console.log(err);
+                  });
+              })
+              .catch((err) => {
+                  console.error(`Error connecting to the SignalR hub: ${err}`)
+              }); 
+        
+         
+        connection.on("ReceiveMessage", function (user, message, timeStamp) {
+            let li = document.createElement("li");
+            document.getElementById("messagesList").appendChild(li);
+            li.textContent = `${user} : ${message} : ${timeStamp}`;
+        });
+       document.getElementById("sendButton").addEventListener("click", function (event) {
+           let message = document.getElementById("messageInput").value;
+           console.log(`Message: ${message}`);
+           console.log(`roomName: ${roomName}`);
+           connection.invoke("SendMessageToGroup", roomName, message).catch(function (err) {
+               return console.error(err.toString());
+           });
+           
+           let sender = document.getElementById('sender').value;
+           const baseUri = "http://localhost:5099/api/Message/";
+           let token = sessionStorage.getItem('Token');
+           const axiosConfig = {headers:{Authorization: "Bearer " + token}}
+           axios.post(baseUri,{"sender":sender,"roomName":roomName,"content":message},axiosConfig)
+           .then((response) =>{
+               console.log(response);
+           })
+           .catch((error)=>{
+               console.log(error);
+           })
+           
+       
+       
+           event.preventDefault();
+       });
+</script>

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "HSRzJcpNS9k3D8+99CKhIef0T5Cg76JW2rBgime9Ptg=",
+  "Source": "signalRchat.Api",
+  "BasePath": "_content/signalRchat.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

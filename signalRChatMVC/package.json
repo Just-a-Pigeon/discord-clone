@@ -1,0 +1,22 @@
+{
+  "name": "signalrchatmvc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "npx tailwindcss -i wwwroot/css/site.css -o wwwroot/css/app.min.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.16",
+    "axios": "^1.6.7",
+    "flowbite": "^2.2.1",
+    "postcss": "^8.4.33",
+    "postcss-cli": "^11.0.0"
+  }
+}
