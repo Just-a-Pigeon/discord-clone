@@ -29,6 +29,7 @@ namespace signalRchat.Api.Controllers
         }
 
         [HttpGet("pendingrequests/{userId:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetPendingFriendRequests(Guid userId)
         {
             if (userId == null)
@@ -39,6 +40,29 @@ namespace signalRchat.Api.Controllers
 
         }
 
+        [HttpPost("acceptrequest")]
+        public async Task<IActionResult> AcceptFriendRequest(Guid userId, Guid friendId)
+        {
+            if (userId == null || friendId == null) 
+                return BadRequest("Something went wrong trying to accept the friend request");
+            
+            await _friendshipService.AcceptFriendRequest(userId, friendId);
+            return Ok("Friend request accepted successfully");
+
+        }
+        
+        [HttpPost("rejectrequest")]
+        public async Task<IActionResult> RejectFriendRequest(Guid userId, Guid friendId)
+        {
+            if (userId == null || friendId == null) 
+                return BadRequest("Something went wrong trying to reject the friend request");
+            
+            await _friendshipService.RejectFriendRequest(userId, friendId);
+            return Ok("Friend request rejected successfully");
+
+        }
+        
+        
 
 
     }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("signalRchat.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c4f96b7dc61d389544e40e2fd5f1cdcd9b877be")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3504de7ab6322b41ea3c0128faae3ebbd54aa11e")]
 [assembly: System.Reflection.AssemblyProductAttribute("signalRchat.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("signalRchat.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
