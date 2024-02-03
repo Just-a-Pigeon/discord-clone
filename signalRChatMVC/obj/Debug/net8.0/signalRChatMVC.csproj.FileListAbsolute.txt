@@ -234,3 +234,4 @@ C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRChatMVC\obj\Debug\net8
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRChatMVC\obj\Debug\net8.0\signalRChatMVC.genruntimeconfig.cache
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRChatMVC\obj\Debug\net8.0\ref\signalRChatMVC.dll
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRChatMVC\bin\Debug\net8.0\MongoDB.Bson.dll
+C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRChatMVC\obj\Debug\net8.0\signalRChatMVC.sourcelink.json

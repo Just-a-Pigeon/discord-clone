@@ -1,10 +1,12 @@
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using signalRChatMVC.ViewModels;
 
 namespace signalRChatMVC.Controllers
 {
+    
     public class ChatController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -18,6 +20,9 @@ namespace signalRChatMVC.Controllers
         [HttpGet]
         public async Task<ActionResult> Chat(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Auth");
+            
             ViewBag.RoomName = id;
             var client = _httpClientFactory.CreateClient();
             var token = HttpContext.Session.GetString("Token");
@@ -34,6 +39,8 @@ namespace signalRChatMVC.Controllers
         [HttpPost]
         public async Task<ActionResult> Chat()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Auth");
             /*
             ViewBag.RoomName = id;
             var client = _httpClientFactory.CreateClient();
@@ -49,6 +56,9 @@ namespace signalRChatMVC.Controllers
 
         public ActionResult ChatRooms(string id)
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Auth");
+            
             ViewBag.RoomName = id;
             return View();
         }
