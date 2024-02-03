@@ -37,5 +37,10 @@ public class ChatHub : Hub
     {
         return Clients.User(user).SendAsync("ReceiveMessage", message);
     }
-    
+
+    public async Task ReceiveFriendRequestNotifiaction(string userId, string notificationMessage)
+    {
+        await Clients.User(userId).SendAsync("ReceiveFriendRequestNotification", notificationMessage);
+    }
+
 }
