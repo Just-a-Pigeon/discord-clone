@@ -21,13 +21,25 @@ namespace signalRchat.Api.Controllers
         [Authorize]
         public async Task<IActionResult> SendFriendRequest(Guid userId, Guid friendId)
         {
-            if (userId == null || friendId == null)
+            if (userId == null || friendId == null) 
                 return BadRequest("Something went wrong trying to send the friend request");
 
             await _friendshipService.SendFriendRequest(userId, friendId);
             return Ok("Friend request has been sent successfully");
         }
-        
-        
+
+        [HttpGet("pendingrequests/{userId:guid}")]
+        public async Task<IActionResult> GetPendingFriendRequests(Guid userId)
+        {
+            if (userId == null)
+                return BadRequest("Something went wrong retrieving the friend requests");
+
+            var pendingRequests = await _friendshipService.GetPendingFriendRequest(userId);
+            return Ok(pendingRequests);
+
+        }
+
+
+
     }
 }
