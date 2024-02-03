@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using signalRchat.Core.Services;
+using signalRchat.Core.Services.Interfaces;
 
 namespace signalRchat.Api.Controllers
 {
@@ -10,9 +11,9 @@ namespace signalRchat.Api.Controllers
     [ApiController]
     public class FriendRequestController : ControllerBase
     {
-        private readonly FriendshipService _friendshipService;
+        private readonly IFriendshipService _friendshipService;
 
-        public FriendRequestController(FriendshipService friendshipService)
+        public FriendRequestController(IFriendshipService friendshipService)
         {
             _friendshipService = friendshipService;
         }
@@ -69,9 +70,6 @@ namespace signalRchat.Api.Controllers
             var friends = await _friendshipService.GetFriends(userId);
             return Ok(friends);
         }
-
-
-
-
+        
     }
 }
