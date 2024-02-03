@@ -8,11 +8,11 @@ namespace signalRchat.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FriendshipController : ControllerBase
+    public class FriendRequestController : ControllerBase
     {
         private readonly FriendshipService _friendshipService;
 
-        public FriendshipController(FriendshipService friendshipService)
+        public FriendRequestController(FriendshipService friendshipService)
         {
             _friendshipService = friendshipService;
         }
@@ -52,6 +52,7 @@ namespace signalRchat.Api.Controllers
         }
         
         [HttpPost("rejectrequest")]
+        [Authorize]
         public async Task<IActionResult> RejectFriendRequest(Guid userId, Guid friendId)
         {
             if (userId == null || friendId == null) 
@@ -61,8 +62,15 @@ namespace signalRchat.Api.Controllers
             return Ok("Friend request rejected successfully");
 
         }
-        
-        
+
+        [HttpGet("friends/{userId:guid}")]
+        public async Task<IActionResult> GetFriends(Guid userId)
+        {
+            var friends = await _friendshipService.GetFriends(userId);
+            return Ok(friends);
+        }
+
+
 
 
     }
