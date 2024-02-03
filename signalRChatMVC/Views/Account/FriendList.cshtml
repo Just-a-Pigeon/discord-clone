@@ -1,0 +1,17 @@
+@model signalRChatMVC.ViewModels.FriendListViewModel
+@{
+    ViewData["Title"] = "FriendList";
+}
+
+<h1>FriendList</h1>
+<ul>
+    @foreach (var friend in Model.Friends)
+    {
+        <li>
+            <div>
+                <p>@friend.Firstname  @friend.Lastname</p>
+                <p>@friend.Username</p>
+            </div>
+        </li>
+    }
+</ul>
