@@ -10,3 +10,4 @@ C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Core\obj\Debug\ne
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Core\obj\Debug\net8.0\refint\signalRchat.Core.dll
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Core\obj\Debug\net8.0\signalRchat.Core.pdb
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Core\obj\Debug\net8.0\ref\signalRchat.Core.dll
+C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Core\obj\Debug\net8.0\signalRchat.Core.sourcelink.json

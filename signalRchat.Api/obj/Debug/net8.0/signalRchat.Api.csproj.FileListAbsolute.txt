@@ -272,3 +272,4 @@ C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Api\bin\Debug\net
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Api\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Api\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Api\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
+C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Api\obj\Debug\net8.0\signalRchat.Api.sourcelink.json

@@ -15,3 +15,4 @@ C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Infrastructure\ob
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Infrastructure\obj\Debug\net8.0\signalRchat.Infrastructure.pdb
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Infrastructure\obj\Debug\net8.0\signalRchat.Infrastructure.genruntimeconfig.cache
 C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Infrastructure\obj\Debug\net8.0\ref\signalRchat.Infrastructure.dll
+C:\Users\yanick\RiderProjects\signalRchat.Learning\signalRchat.Infrastructure\obj\Debug\net8.0\signalRchat.Infrastructure.sourcelink.json
