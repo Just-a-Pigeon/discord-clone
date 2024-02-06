@@ -89,19 +89,16 @@ namespace signalRChatMVC.Controllers
         {
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var apiEndpoint = "http://localhost:5099/api/auth/Register"; // Replace with your API endpoint
+                bool isRegistered = await _apiService.Register(registerViewModel.Username, registerViewModel.Firstname,
+                    registerViewModel.Lastname, registerViewModel.Password, registerViewModel.Email);
 
-                var response = await client.PostAsJsonAsync(apiEndpoint, registerViewModel);
-
-                if (response.IsSuccessStatusCode)
+                if (isRegistered)
                 {
                     // Redirect to the home page or a secure area
                     return RedirectToAction("Login", "Auth");
                 }
                 else
                 {
-                    // Handle unsuccessful login
                     // You might want to display an error message to the user
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View();
