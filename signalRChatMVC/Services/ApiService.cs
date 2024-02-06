@@ -1,5 +1,8 @@
-﻿using NuGet.Common;
+﻿using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using NuGet.Common;
 using signalRChatMVC.DTOs.Auth;
+using signalRChatMVC.Models;
 using signalRChatMVC.Services.Interfaces;
 
 namespace signalRChatMVC.Services;
@@ -57,8 +60,17 @@ public class ApiService: IApiService
         throw new NotImplementedException();
     }
 
-    public Task GetMessages(string roomId)
+    public async Task<List<MessageModel>> GetMessages(string roomId,string token)
     {
-        throw new NotImplementedException();
+        var client = _httpClientFactory.CreateClient();
+        var endPoint = baseUrl + $"Message/room/{roomId}";
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.GetStringAsync(endPoint);
+        var messages = JsonConvert.DeserializeObject<List<MessageModel>>(response);
+
+        return messages;
+
     }
 }
