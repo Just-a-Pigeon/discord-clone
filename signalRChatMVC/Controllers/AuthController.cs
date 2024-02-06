@@ -11,16 +11,19 @@ using System.Security.Policy;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using signalRChatMVC.Services.Interfaces;
 
 namespace signalRChatMVC.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private IApiService _apiService;
 
-        public AuthController(IHttpClientFactory httpClientFactory)
+        public AuthController(IHttpClientFactory httpClientFactory, IApiService apiService)
         {
             _httpClientFactory = httpClientFactory;
+            _apiService = apiService;
         }
 
         // GET: AuthController
@@ -39,16 +42,12 @@ namespace signalRChatMVC.Controllers
         {
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var apiEndpoint = "http://localhost:5099/api/auth/Login"; // Replace with your API endpoint
-
-                var response = await client.PostAsJsonAsync(apiEndpoint, loginViewModel);
-
-                if (response.IsSuccessStatusCode)
+                var token = await _apiService.Login(loginViewModel.Username, loginViewModel.Password);
+                
+                if (!token.IsNullOrEmpty())
                 {
-                    var token = await response.Content.ReadFromJsonAsync<AuthLoginModel>();
                     // Store the token securely (e.g., in a cookie or session)
-                    HttpContext.Session.SetString("Token", token.Token);
+                    HttpContext.Session.SetString("Token",token);
                     
                     // Redirect to the home page or a secure area
                     return RedirectToAction("Index", "Home");
