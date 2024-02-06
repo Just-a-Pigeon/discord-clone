@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using signalRChatMVC.Services.Interfaces;
 using signalRChatMVC.ViewModels;
 
 namespace signalRChatMVC.Controllers
@@ -10,10 +11,12 @@ namespace signalRChatMVC.Controllers
     public class ChatController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private IApiService _apiService;
 
-        public ChatController(IHttpClientFactory httpClientFactory)
+        public ChatController(IHttpClientFactory httpClientFactory, IApiService apiService)
         {
             _httpClientFactory = httpClientFactory;
+            _apiService = apiService;
         }
         // GET: ChatController
     
@@ -24,15 +27,13 @@ namespace signalRChatMVC.Controllers
                 return RedirectToAction("Login", "Auth");
             
             ViewBag.RoomName = id;
-            var client = _httpClientFactory.CreateClient();
             var token = HttpContext.Session.GetString("Token");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var apiEndpoint = $"http://localhost:5099/api/Message/room/{id}"; // Replace with your API endpoint
+            var messages = await _apiService.GetMessages(id, token);
+
+            var messageVieModel = new MessageViewModel();
+            messageVieModel.Messages = messages;
             
-            
-            var response = await client.GetStringAsync(apiEndpoint);
-            var messages = JsonConvert.DeserializeObject<List<MessageViewModel>>(response);
-            return View(messages);
+            return View(messageVieModel);
         }
         
         
