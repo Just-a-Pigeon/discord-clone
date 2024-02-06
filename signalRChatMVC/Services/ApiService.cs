@@ -17,7 +17,7 @@ public class ApiService: IApiService
     public async Task<string> Login(string username, string password)
     {
         var client = _httpClientFactory.CreateClient();
-        var endPoint = baseUrl + "/auth/Login";
+        var endPoint = baseUrl + "auth/Login";
 
         var loginDto = new LoginDto()
         {
