@@ -1,9 +1,11 @@
-﻿namespace signalRChatMVC.Services.Interfaces;
+﻿using signalRChatMVC.Models;
 
-public interface IApiService
+namespace signalRChatMVC.Services.Interfaces;
+
+public interface IApiService 
 {
     Task<string> Login(string username,string password);
     Task<bool> Register(string username, string firstname, string lastname, string password,string email);
     Task SendMessage(string sender, string roomName, string content, DateTime timestamp);
-    Task GetMessages(string roomId);
+    Task<List<MessageModel>> GetMessages(string roomId,string token);
 }
