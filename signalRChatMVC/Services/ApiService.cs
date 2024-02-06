@@ -19,7 +19,7 @@ public class ApiService: IApiService
         var client = _httpClientFactory.CreateClient();
         var endPoint = baseUrl + "auth/Login";
 
-        var loginDto = new LoginDto()
+        var loginDto = new LoginDto
         {
             Username = username,
             Password = password
@@ -33,9 +33,23 @@ public class ApiService: IApiService
 
     }
 
-    public Task Register(string username, string firstname, string lastname, string password)
+    public async Task<bool> Register(string username, string firstname, string lastname, string password,string email)
     {
-        throw new NotImplementedException();
+        var client = _httpClientFactory.CreateClient();
+        var endPoint = baseUrl + "auth/Register";
+
+        var registerDto = new RegisterDto
+        {
+            Firstname = firstname,
+            Lastname = lastname,
+            Email = email,
+            Password = password,
+            Username = username
+        };
+
+       var response = await client.PostAsJsonAsync(endPoint, registerDto);
+
+       return response.IsSuccessStatusCode;
     }
 
     public Task SendMessage(string sender, string roomName, string content, DateTime timestamp)
