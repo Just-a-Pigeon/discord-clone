@@ -11,6 +11,6 @@ public class MessageViewModel
     public string RoomName { get; set; }
     public string Content { get; set; }
     public DateTime Timestamp { get; set; }
-    
-   // public List<MessageModel> Messages { get; set; }
+
+    public List<MessageModel> Messages { get; set; } = new List<MessageModel>();
 }

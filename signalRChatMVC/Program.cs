@@ -75,7 +75,7 @@ app.MapControllerRoute(
     );
 app.MapControllerRoute(
     name: "chat",
-    pattern: "{controller=Chat}/{action=Chat}/{id}"
+    pattern: "{controller=Chat}/{action=Chat}/{id?}"
 );
 app.MapControllerRoute(
     name: "chatroom",
