@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using NuGet.Common;
 using signalRChatMVC.DTOs.Auth;
+using signalRChatMVC.DTOs.Messages;
 using signalRChatMVC.Models;
 using signalRChatMVC.Services.Interfaces;
 
@@ -55,9 +56,22 @@ public class ApiService: IApiService
        return response.IsSuccessStatusCode;
     }
 
-    public Task SendMessage(string sender, string roomName, string content, DateTime timestamp)
+    public async Task SendMessage(string sender, string roomName, string content, DateTime timestamp,string token)
     {
-        throw new NotImplementedException();
+        var client = _httpClientFactory.CreateClient();
+        var endpoint = baseUrl + "Message";
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        var messageDto = new MessageDto
+        {
+            Sender = sender,
+            Content = content,
+            RoomName = roomName,
+            Timestamp = timestamp
+        };
+
+        await client.PostAsJsonAsync(endpoint, messageDto);
     }
 
     public async Task<List<MessageModel>> GetMessages(string roomId,string token)
