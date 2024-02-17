@@ -38,7 +38,8 @@ namespace signalRChatMVC.Controllers
         
         
         [HttpPost]
-        public async Task<ActionResult> Chat()
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Chat(MessageViewModel messageViewModel)
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Auth");
@@ -51,7 +52,10 @@ namespace signalRChatMVC.Controllers
             
             var response = await client.PostAsJsonAsync(apiEndpoint,messageViewModel);
             */
-            return View();
+            var token = HttpContext.Session.GetString("Token");
+            await _apiService.SendMessage(messageViewModel.Sender, messageViewModel.RoomName, messageViewModel.Content,
+                messageViewModel.Timestamp = DateTime.Now, token);
+            return RedirectToAction("Chat");
         }
         
 
