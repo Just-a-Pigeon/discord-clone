@@ -44,16 +44,13 @@ namespace signalRChatMVC.Controllers
         {
             FriendListViewModel friendListViewModel = new FriendListViewModel();
             
-            var client = _httpClientFactory.CreateClient();
             var token = HttpContext.Session.GetString("Token");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var apiEndpoint = $"http://localhost:5099/api/Account"; // Replace with your API endpoint
-            
-            var response = await client.GetFromJsonAsync<List<UserModel>>(apiEndpoint);
-            var users = searchTerm == null ? response : response?.Where(
+            var users= await _apiService.GetUsers(token);
+          
+            var usersList = searchTerm == null ? users : users?.Where(
                 u => u.Username.Contains(searchTerm) || u.Firstname.Contains(searchTerm)).ToList();
 
-            friendListViewModel.SearchResults = users;
+            friendListViewModel.SearchResults = usersList;
 
             return BadRequest();
         }
