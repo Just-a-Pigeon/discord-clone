@@ -8,4 +8,5 @@ public interface IApiService
     Task<bool> Register(string username, string firstname, string lastname, string password,string email);
     Task SendMessage(string sender, string roomName, string content, DateTime timestamp,string token);
     Task<List<MessageModel>> GetMessages(string roomId,string token);
+    Task<List<UserModel>> GetFriends(Guid userId ,string token);
 }
