@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using NuGet.Common;
 using signalRChatMVC.DTOs.Auth;
@@ -86,5 +87,18 @@ public class ApiService: IApiService
 
         return messages;
 
+    }
+
+    public async  Task<List<UserModel>> GetFriends(Guid userId,string token)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var endPoint = baseUrl + $"FriendRequest/friends/{userId}";
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.GetStringAsync(endPoint);
+        var friends = JsonConvert.DeserializeObject<List<UserModel>>(response);
+
+        return friends;
     }
 }
