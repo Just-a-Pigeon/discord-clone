@@ -101,4 +101,17 @@ public class ApiService: IApiService
 
         return friends;
     }
+
+    public async Task<List<UserModel>> GetUsers(string token)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var endPoint = baseUrl + $"Account";
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.GetStringAsync(endPoint);
+        var users = JsonConvert.DeserializeObject<List<UserModel>>(response);
+
+        return users;
+    }
 }
