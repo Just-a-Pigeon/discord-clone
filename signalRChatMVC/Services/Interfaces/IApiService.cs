@@ -9,4 +9,5 @@ public interface IApiService
     Task SendMessage(string sender, string roomName, string content, DateTime timestamp,string token);
     Task<List<MessageModel>> GetMessages(string roomId,string token);
     Task<List<UserModel>> GetFriends(Guid userId ,string token);
+    Task<List<UserModel>> GetUsers(string token);
 }
