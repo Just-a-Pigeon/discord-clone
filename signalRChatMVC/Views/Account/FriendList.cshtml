@@ -1,29 +1,9 @@
 @model signalRChatMVC.ViewModels.FriendListViewModel
-@{
-    ViewData["Title"] = "FriendList";
-}
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div>
 
-<div>
-    <h2>Search for friends</h2>
-    <form method="post">
-        <input asp-for="SearchTerm" type="text" placeholder="username or name"/>
-        <button type="submit" value="search" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded" asp-action="Search">Search</button>
-    </form>
-    <h2>Search result</h2>
-    <ul>
-        @foreach (var friend in Model.SearchResults)
-        {
-            <li>
-                <div>
-                    <p>@friend.Firstname @friend.Lastname</p>
-                    <p>@friend.Username</p>
-                </div>
-            </li>
-        }
-    </ul>
-</div>
-<div>
-    <h2>FriendList</h2>
     <ul>
         @foreach (var friend in Model.Friends)
         {
