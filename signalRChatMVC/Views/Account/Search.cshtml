@@ -1,0 +1,17 @@
+﻿@model signalRChatMVC.ViewModels.FriendListViewModel
+
+
+
+
+<h2>Search result</h2>
+<ul>
+    @foreach (var friend in Model.SearchResults)
+    {
+        <li>
+            <div>
+                <p>@friend.Firstname @friend.Lastname</p>
+                <p>@friend.Username</p>
+            </div>
+        </li>
+    }
+</ul>

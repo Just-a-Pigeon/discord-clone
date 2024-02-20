@@ -74,6 +74,11 @@ app.MapControllerRoute(
     
     );
 app.MapControllerRoute(
+    name: "friends",
+    pattern: "{controller=Account}/{action=Index}/{searchTerm?}"
+    
+    );
+app.MapControllerRoute(
     name: "chat",
     pattern: "{controller=Chat}/{action=Chat}/{id?}"
 );

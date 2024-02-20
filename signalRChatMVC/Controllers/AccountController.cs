@@ -22,37 +22,41 @@ namespace signalRChatMVC.Controllers
             _apiService = apiService;
         }
 
-        // GET: AccountController
-        public async Task<ActionResult> FriendList()
+        public async Task<IActionResult> Index(string searchTerm)
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Auth");
             
             FriendListViewModel friendListViewModel = new FriendListViewModel();
+
+            friendListViewModel.Friends = await GetFriendList();
+            friendListViewModel.SearchResults = await Search(searchTerm);
+            
+            return View(friendListViewModel);
+        }
+        
+        public async Task<List<UserModel>> GetFriendList()
+        {
             
             var userId =  Guid.Parse(User.Claims.Where(c=> c.Type == ClaimTypes.NameIdentifier).First().Value);
             var token = HttpContext.Session.GetString("Token");
             
             var friendlist = await _apiService.GetFriends(userId, token);
 
-            friendListViewModel.Friends = friendlist;
-            
-            return View(friendListViewModel);
+            return friendlist;
         }
-
-        public async Task<IActionResult> Search(string searchTerm)
+        
+        public async Task<List<UserModel>> Search(string searchTerm)
         {
-            FriendListViewModel friendListViewModel = new FriendListViewModel();
+            
             
             var token = HttpContext.Session.GetString("Token");
             var users= await _apiService.GetUsers(token);
           
             var usersList = searchTerm == null ? users : users?.Where(
                 u => u.Username.Contains(searchTerm) || u.Firstname.Contains(searchTerm)).ToList();
-
-            friendListViewModel.SearchResults = usersList;
-
-            return BadRequest();
+            
+            return usersList;
         }
 
     }
