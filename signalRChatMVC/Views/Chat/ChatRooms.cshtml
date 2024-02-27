@@ -1,107 +1,46 @@
-@*
-<div class="container">
-    <div class="row p-1">
-        <div class="col-1">User</div>
-        <div class="col-5">
-            <p type="text" id="sender">@User.Identity.Name</p>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5">
-            <input type="text" class="w-100" id="messageInput"/>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message"/>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr/>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Chatroom name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Action
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <div class="grid-cols-1">Room1</div>
+            </th>
+            <td class="px-6 py-4">
+                <div class="grid-cols-2">
+                    <a class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" asp-route-id="room1" asp-controller="Chat" asp-action="chat">Join</a>
+                </div>
+            </td>
+        </tr>
+        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <div class="grid-cols-1">Room2</div>
+            </th>
+            <td class="px-6 py-4">
+                <div class="col-5">
+                    <a class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="Room2" asp-route-id="room2" asp-controller="Chat" asp-action="Chat">Join</a>
+                </div>
+            </td>
+        </tr>
+        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <div class="grid-cols-1">Room3</div>
+            </th>
+            <td class="px-6 py-4">
+                <div class="col-5">
+                    <a class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="Room3" asp-route-id="room3" asp-controller="Chat" asp-action="Chat">Join</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
-
-<script>
-
-"use strict";
-
-var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
-
-//Disable the send button until connection is established.
-document.getElementById("sendButton").disabled = true;
-
-connection.on("ReceiveMessage", function (user, message, timeStamp) {
-    var li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user} : ${message} : ${timeStamp}`;
-});
-
-connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
-}).catch(function (err) {
-    return console.error(err.toString());
-});
-
-document.getElementById("sendButton").addEventListener("click", function (event) {
-    var sender = document.getElementById("sender").innerText;
-    var message = document.getElementById("messageInput").value;
-
-    connection.invoke("SendMessage", sender, message).catch(function (err) {
-        return console.error(err.toString());
-    });
-
-
-    event.preventDefault();
-});
-</script>
-
-*@
-<div class="container">
-    <div class="row p-1">
-        <div class="col-1">Room1</div>
-        <div class="col-5">
-            <a class="btn btn-primary" asp-route-id="room1" asp-controller="Chat" asp-action="chat">Join</a>
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Room2</div>
-        <div class="col-5">
-            <a class="btn btn-primary" id="Room2" asp-route-id="room2" asp-controller="Chat" asp-action="Chat">Join</a>
-        </div>
-    </div>    
-    <div class="row p-1">
-        <div class="col-1">Room3</div>
-        <div class="col-5">
-            <a class="btn btn-primary" id="Room3" asp-route-id="room3" asp-controller="Chat" asp-action="Chat">Join</a>
-        </div>
-    </div>
-</div>
-
-@*
-<script>
-    let roomName = "Room1"
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/chat")
-        .build();
-    
-    connection.start()
-        .then(() => {
-            console.log('Connected to the SignalR hub');
-        })
-        .catch((err) => {
-            console.error(`Error connecting to the SignalR hub: ${err}`);
-        });
-</script>
-*@
