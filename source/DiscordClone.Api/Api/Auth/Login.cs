@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DiscordClone.Api.DTOs.Auth;
 using DiscordClone.Contract.Rest.Request.Auth;
+using DiscordClone.Contract.Rest.Response.Auth;
 using DiscordClone.Domain.Entities.Consultation;
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;

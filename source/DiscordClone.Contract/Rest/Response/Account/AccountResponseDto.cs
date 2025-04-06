@@ -1,4 +1,4 @@
-﻿namespace DiscordClone.Api.DTOs.Account;
+﻿namespace DiscordClone.Contract.Rest.Response.Account;
 
 public class AccountResponseDto
 {

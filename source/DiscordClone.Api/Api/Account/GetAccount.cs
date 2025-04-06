@@ -1,12 +1,12 @@
-﻿using DiscordClone.Api.DTOs.Account;
+﻿using DiscordClone.Contract.Rest.Response.Account;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Account;
-public class GetAccount(DiscordCloneContext dbContext) : Endpoint<GetAccount.Request, AccountResponseDto>
+public class GetAccount(DiscordCloneContext dbContext, ILogger<GetAccount> logger) : Endpoint<GetAccount.Request, AccountResponseDto>
 {
-    
     public override void Configure()
     {
         Get("{Id:Guid}");
@@ -16,6 +16,7 @@ public class GetAccount(DiscordCloneContext dbContext) : Endpoint<GetAccount.Req
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == req.Id, ct);
+        
         if (user is null)
         {
             await SendNotFoundAsync(ct);
@@ -36,5 +37,38 @@ public class GetAccount(DiscordCloneContext dbContext) : Endpoint<GetAccount.Req
     public class Request
     {
         public Guid Id { get; set; }
+    }
+
+    public class MyValidator : Validator<Request>
+    {
+        public MyValidator()
+        {
+            RuleFor(x => x.Id)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Id is required");
+        }
+    }
+
+    public class Documentation : Summary<GetAccount>
+    {
+        public Documentation()
+        {
+            var id = Guid.NewGuid();
+            
+            Summary = "Get account by specified Id";
+            Description = "Get account by specified Id";
+            ExampleRequest = new Request()
+            {
+                Id = id,
+            };
+            Response(200, "Get account by specified Id", example: new AccountResponseDto
+            {
+                Id = id,
+                Username = "Pigeon",
+                Firstname = "I stuff my",
+                Lastname = "self with carrots"
+            });
+        }
     }
 }

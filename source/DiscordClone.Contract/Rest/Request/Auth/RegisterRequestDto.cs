@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiscordClone.Api.DTOs.Auth;
+namespace DiscordClone.Contract.Rest.Request.Auth;
 
 public class RegisterRequestDto
 {

@@ -1,4 +1,4 @@
-﻿using DiscordClone.Api.DTOs.Account;
+﻿using DiscordClone.Contract.Rest.Response.Account;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;

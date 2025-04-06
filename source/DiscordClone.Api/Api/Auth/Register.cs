@@ -1,4 +1,4 @@
-﻿using DiscordClone.Api.DTOs.Auth;
+﻿using DiscordClone.Contract.Rest.Request.Auth;
 using DiscordClone.Domain.Entities.Consultation;
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;

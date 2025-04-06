@@ -22,6 +22,8 @@ var configuration = builder.Configuration;
 var datasource = DataSourceBuilder.Build(configuration);
 builder.Configuration.Bind(config);
 
+builder.Logging.ClearProviders();
+
 builder.Services.AddCors();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
@@ -78,48 +80,49 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("CanRead", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    })
-    .AddPolicy("CanEdit", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    })
-    .AddPolicy("CanUpdate", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    })
-    .AddPolicy("CanDelete", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    });
+builder.Services.AddAuthorizationBuilder();
+    // .AddPolicy("CanRead", policy =>
+    // {
+    //     policy.RequireAssertion(context =>
+    //     {
+    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+    //             return true;
+    //         return false;
+    //     });
+    // })
+    // .AddPolicy("CanEdit", policy =>
+    // {
+    //     policy.RequireAssertion(context =>
+    //     {
+    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+    //             return true;
+    //         return false;
+    //     });
+    // })
+    // .AddPolicy("CanUpdate", policy =>
+    // {
+    //     policy.RequireAssertion(context =>
+    //     {
+    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+    //             return true;
+    //         return false;
+    //     });
+    // })
+    // .AddPolicy("CanDelete", policy =>
+    // {
+    //     policy.RequireAssertion(context =>
+    //     {
+    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+    //             return true;
+    //         return false;
+    //     });
+    // });
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors();
 
 if (app.Environment.IsDevelopment())
 {

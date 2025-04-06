@@ -19,7 +19,7 @@ public class Message
     {
         // Required by EFCore
     }
-
+    
     public static Result<Message, ValidationError> Create(Guid sender, Guid receiver, string content, DateTimeOffset createdOn, MessageType messageType)
     {
         if (string.IsNullOrWhiteSpace(content))
