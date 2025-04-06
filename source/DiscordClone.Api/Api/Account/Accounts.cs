@@ -10,7 +10,7 @@ public class Accounts : Group
         {
             ep.Description(x =>
             {
-                x.RequireAuthorization();
+                x.AllowAnonymous();
             });
         });
     }

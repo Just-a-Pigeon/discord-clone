@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using OpenApiServer = NSwag.OpenApiServer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,10 +21,13 @@ var config = new Configuration();
 var configuration = builder.Configuration;
 
 var datasource = DataSourceBuilder.Build(configuration);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration).WriteTo.OpenTelemetry()
+    .CreateLogger();
+
 builder.Configuration.Bind(config);
-
-builder.Logging.ClearProviders();
-
+builder.Services.AddSerilog();
 builder.Services.AddCors();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
@@ -49,7 +53,7 @@ builder.Services
     .SwaggerDocument(o =>
     {
         o.ExcludeNonFastEndpoints = true;
-        o.EnableJWTBearerAuth = true;
+        o.EnableJWTBearerAuth = false;
         o.ShortSchemaNames = true;
         o.MaxEndpointVersion = 1;
         o.DocumentSettings = s =>
@@ -81,48 +85,13 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorizationBuilder();
-    // .AddPolicy("CanRead", policy =>
-    // {
-    //     policy.RequireAssertion(context =>
-    //     {
-    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-    //             return true;
-    //         return false;
-    //     });
-    // })
-    // .AddPolicy("CanEdit", policy =>
-    // {
-    //     policy.RequireAssertion(context =>
-    //     {
-    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-    //             return true;
-    //         return false;
-    //     });
-    // })
-    // .AddPolicy("CanUpdate", policy =>
-    // {
-    //     policy.RequireAssertion(context =>
-    //     {
-    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-    //             return true;
-    //         return false;
-    //     });
-    // })
-    // .AddPolicy("CanDelete", policy =>
-    // {
-    //     policy.RequireAssertion(context =>
-    //     {
-    //         if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-    //             return true;
-    //         return false;
-    //     });
-    // });
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
