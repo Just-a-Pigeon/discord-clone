@@ -11,12 +11,10 @@ public class MessageEntityConfiguration : IEntityTypeConfiguration<Message>
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Content)
-            .HasColumnType("NVARCHAR")
             .HasMaxLength(2000)
             .IsRequired();
 
         builder.Property(x => x.Type)
-            .HasColumnType("VARCHAR")
             .HasMaxLength(20);
     }
 }

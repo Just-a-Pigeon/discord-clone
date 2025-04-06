@@ -15,7 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Scripts\" />
+      <EmbeddedResource Include="Scripts\20250406130619_Init.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

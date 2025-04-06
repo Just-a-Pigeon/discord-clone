@@ -9,7 +9,7 @@
 cd .\Source\DiscordClone.Persistence
 dotnet ef migrations add <MyNewMigration>
 ```
-3) Create a new `.sql` file for your migration under `AiService.DbMigrator\Scripts`. Make the Build Action is set to **Embedded Resource**.
+3) Create a new `.sql` file for your migration under `DiscordClone.DbMigrator\Scripts`. Make the Build Action is set to **Embedded Resource**.
 4) Give it the same name as your `.cs` version of the migration. For example: `20231002145136_MyNewMigration.cs` -> `20231002145136_MyNewMigration.sql`
 4) Generate a SQL variant of the migration, replace _MostRecentMigration_ with the name of the most recent migration. Copy the output to the `.sql` file.
 ```

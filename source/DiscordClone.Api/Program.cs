@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DiscordClone.Api.Configuration;
+using DiscordClone.Api.Utils;
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
@@ -16,17 +17,23 @@ using OpenApiServer = NSwag.OpenApiServer;
 var builder = WebApplication.CreateBuilder(args);
 
 var config = new Configuration();
+var configuration = builder.Configuration;
+
+var datasource = DataSourceBuilder.Build(configuration);
 builder.Configuration.Bind(config);
 
 builder.Services.AddCors();
-// Add services to the container.
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+}).AddEntityFrameworkStores<DiscordCloneContext>();
 
 builder.Services.AddDbContext<DiscordCloneContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("Database");
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(datasource);
     options.UseSnakeCaseNamingConvention();
-    
+
     if (builder.Environment.IsDevelopment())
     {
         options.EnableDetailedErrors();
@@ -34,10 +41,6 @@ builder.Services.AddDbContext<DiscordCloneContext>(options =>
     }
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
-{
-    options.SignIn.RequireConfirmedEmail = false;
-}).AddEntityFrameworkStores<DiscordCloneContext>();
 builder.Services.AddFastEndpoints();
 
 builder.Services
@@ -61,22 +64,49 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(jwtOptions =>
 {
-    var configuration = builder.Configuration;
+    var builderConfiguration = builder.Configuration;
     jwtOptions.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateActor = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidIssuer = configuration["JWTConfiguration:Issuer"],
-        ValidAudience = configuration["JWTConfiguration:Audience"],
+        ValidIssuer = builderConfiguration["JWTConfiguration:Issuer"],
+        ValidAudience = builderConfiguration["JWTConfiguration:Audience"],
         IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTConfiguration:SigningKey"] ?? string.Empty))
+            new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builderConfiguration["JWTConfiguration:SigningKey"] ?? string.Empty))
     };
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("CanRead", policy =>
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("CanRead", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+                return true;
+            return false;
+        });
+    })
+    .AddPolicy("CanEdit", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+                return true;
+            return false;
+        });
+    })
+    .AddPolicy("CanUpdate", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
+                return true;
+            return false;
+        });
+    })
+    .AddPolicy("CanDelete", policy =>
     {
         policy.RequireAssertion(context =>
         {
@@ -85,41 +115,11 @@ builder.Services.AddAuthorization(options =>
             return false;
         });
     });
-    options.AddPolicy("CanEdit", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    });
-    options.AddPolicy("CanUpdate", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    });
-    options.AddPolicy("CanDelete", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            if (context.User.IsInRole("Admin") || context.User.IsInRole("User"))
-                return true;
-            return false;
-        });
-    });
-});
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapDefaultControllerRoute();
 
 if (app.Environment.IsDevelopment())
 {

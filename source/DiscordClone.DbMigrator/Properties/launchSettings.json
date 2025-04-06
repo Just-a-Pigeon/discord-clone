@@ -3,7 +3,7 @@
   "profiles": {
     "MigrateLocalDatabase": {
       "commandName": "Project",
-      "commandLineArgs": "\"Data Source=.;Initial Catalog=;Integrated Security=SSPI;TrustServerCertificate=True\""
+      "commandLineArgs": "\"Host=localhost;Port=5432;Database=discordclone;User ID=postgres;Password=mysecretpassword;\""
     }
   }
 }

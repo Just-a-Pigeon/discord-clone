@@ -2,6 +2,7 @@
 using DbUp;
 using DiscordClone.DbMigrator;
 using Microsoft.Data.SqlClient;
+using Npgsql;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -11,7 +12,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var connectionString = args[0];
-var builder = new SqlConnectionStringBuilder(connectionString);
+var builder = new NpgsqlConnectionStringBuilder(connectionString);
 
 var upgrader =
     DeployChanges.To
