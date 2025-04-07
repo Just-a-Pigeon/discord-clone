@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
+using Refit;
 using signalRChatMVC.Hubs;
 using signalRChatMVC.Services;
 using signalRChatMVC.Services.Interfaces;
@@ -43,6 +44,11 @@ builder.Services.AddAuthentication(options =>
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWTConfiguration:SigningKey"]))
         };
     });
+
+builder.Services.AddRefitClient<DiscordClone.Business.ApiServices.Api.IApiService>().ConfigureHttpClient(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["App:DiscordCloneApiUrl"]!);
+});
 
 
 var app = builder.Build();
