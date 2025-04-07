@@ -6,6 +6,13 @@ public class FriendRequests : Group
 {
     public FriendRequests()
     {
-        Configure("friend-requests", ep => { });
+        // ReSharper disable once VirtualMemberCallInConstructor
+        Configure("friend-requests", ep =>
+        {
+            ep.Description(x =>
+            {
+                x.RequireAuthorization();
+            });
+        });
     }
 }

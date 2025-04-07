@@ -1,11 +1,12 @@
-﻿using DiscordClone.Contract.Rest.Response.Account;
+﻿using DiscordClone.Api.Api.Binders;
+using DiscordClone.Contract.Rest.Response.Account;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Account;
-public class GetAccount(DiscordCloneContext dbContext, ILogger<GetAccount> logger) : Endpoint<GetAccount.Request, AccountResponseDto>
+public class GetAccount(DiscordCloneContext dbContext) : Endpoint<GetAccount.Request, AccountResponseDto>
 {
     public override void Configure()
     {
@@ -34,8 +35,10 @@ public class GetAccount(DiscordCloneContext dbContext, ILogger<GetAccount> logge
         await SendOkAsync(result, ct);
     }
 
-    public class Request
+    public class Request : IHasUserId
     {
+        [HideFromDocs]
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
     }
 

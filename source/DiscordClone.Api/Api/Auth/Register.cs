@@ -1,7 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using DiscordClone.Api.Api.Account;
 using DiscordClone.Contract.Rest.Request.Auth;
-using DiscordClone.Contract.Rest.Response.Account;
 using DiscordClone.Domain.Entities.Consultation;
 using FastEndpoints;
 using FluentValidation;
@@ -9,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DiscordClone.Api.Api.Auth;
 
-public class Register(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, IConfiguration config) : Endpoint<RegisterRequestDto>
+public class Register(UserManager<ApplicationUser> userManager) : Endpoint<RegisterRequestDto>
 {
     public override void Configure()
     {
@@ -37,8 +35,6 @@ public class Register(UserManager<ApplicationUser> userManager, SignInManager<Ap
             await SendErrorsAsync(cancellation: ct);
             return;
         }
-
-        await userManager.AddToRoleAsync(user, "User");
 
         await SendOkAsync(ct);
     }

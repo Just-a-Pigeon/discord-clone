@@ -10,7 +10,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DiscordClone.Api.Api.Auth;
 
-public class Login(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, IConfiguration config) : Endpoint<LoginRequestDto, LoginResponseDto>
+public class Login(
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> singInManager,
+    IConfiguration config) : Endpoint<LoginRequestDto, LoginResponseDto>
 {
     public override void Configure()
     {
@@ -21,7 +24,15 @@ public class Login(UserManager<ApplicationUser> userManager, SignInManager<Appli
     public override async Task HandleAsync(LoginRequestDto req, CancellationToken ct)
     {
         var user = await userManager.FindByEmailAsync(req.Username);
-        var result = await singInManager.PasswordSignInAsync(user.UserName, req.Password, false, false);
+        user ??= await userManager.FindByNameAsync(req.Username);
+
+        if (user == null)
+        {
+            await SendUnauthorizedAsync(ct);
+            return;
+        }
+
+        var result = await singInManager.CheckPasswordSignInAsync(user, req.Password, false);
 
         if (!result.Succeeded)
         {
@@ -37,27 +48,29 @@ public class Login(UserManager<ApplicationUser> userManager, SignInManager<Appli
             Token = serializedToken
         }, ct);
     }
-    
+
 
     private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
     {
-        var claims = new List<Claim>();
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, user.UserName!),
+            new(ClaimTypes.Email, user.Email!),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
 
         var userClaims = await userManager.GetClaimsAsync(user);
         claims.AddRange(userClaims);
 
         var roleClaims = await userManager.GetRolesAsync(user);
-        foreach (var roleClaim in roleClaims)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, roleClaim));
-        }
+        foreach (var roleClaim in roleClaims) claims.Add(new Claim(ClaimTypes.Role, roleClaim));
         var expirationDays = config.GetValue<int>("JWTConfiguration:TokenExpirationDays");
         var signingKey = Encoding.UTF8.GetBytes(config.GetValue<string>("JWTConfiguration:SigningKey")!);
         var token = new JwtSecurityToken
         (
-            issuer: config.GetValue<string>("JWTConfiguration:Issuer"),
-            audience: config.GetValue<string>("JWTConfiguration:Audience"),
-            claims: claims,
+            config.GetValue<string>("JWTConfiguration:Issuer"),
+            config.GetValue<string>("JWTConfiguration:Audience"),
+            claims,
             expires: DateTime.UtcNow.Add(TimeSpan.FromDays(expirationDays)),
             notBefore: DateTime.UtcNow,
             signingCredentials: new SigningCredentials(new SymmetricSecurityKey(signingKey),

@@ -9,44 +9,47 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\signalRchat.Api.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\signalRchat.Api.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AngleSharp" Version="1.2.0" />
-        <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
-        <PackageReference Include="EntityFrameworkProfiler" Version="6.0.6048" />
-        <PackageReference Include="FastEndpoints" Version="5.35.0" />
-        <PackageReference Include="FastEndpoints.Security" Version="5.35.0" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="5.35.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.3" />
+        <PackageReference Include="AngleSharp" Version="1.2.0"/>
+        <PackageReference Include="EFCore.NamingConventions" Version="9.0.0"/>
+        <PackageReference Include="EntityFrameworkProfiler" Version="6.0.6048"/>
+        <PackageReference Include="FastEndpoints" Version="5.35.0"/>
+        <PackageReference Include="FastEndpoints.Security" Version="5.35.0"/>
+        <PackageReference Include="FastEndpoints.Swagger" Version="5.35.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.3"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
-        <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-        <PackageReference Include="OpenTelemetry" Version="1.11.2" />
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.11.0-beta.2" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
-        <PackageReference Include="Serilog" Version="4.2.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Serilog.Expressions" Version="5.0.0" />
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0"/>
+        <PackageReference Include="MongoDB.Driver" Version="2.23.1"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
+        <PackageReference Include="OpenTelemetry" Version="1.11.2"/>
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.11.0-beta.2"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1"/>
+        <PackageReference Include="Serilog" Version="4.2.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Expressions" Version="5.0.0"/>
+        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1"/>
+        <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DiscordClone.Contract\DiscordClone.Contract.csproj" />
-      <ProjectReference Include="..\DiscordClone.Domain\DiscordClone.Domain.csproj" />
-      <ProjectReference Include="..\DiscordClone.Persistence\DiscordClone.Persistence.csproj" />
+        <ProjectReference Include="..\DiscordClone.Contract\DiscordClone.Contract.csproj"/>
+        <ProjectReference Include="..\DiscordClone.Domain\DiscordClone.Domain.csproj"/>
+        <ProjectReference Include="..\DiscordClone.Persistence\DiscordClone.Persistence.csproj"/>
     </ItemGroup>
 
 </Project>

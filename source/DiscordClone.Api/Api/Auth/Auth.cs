@@ -6,6 +6,7 @@ public class Auth : Group
 {
     public Auth()
     {
+        // ReSharper disable once VirtualMemberCallInConstructor
         Configure("auth", ep =>
         {
             ep.Description(x =>
