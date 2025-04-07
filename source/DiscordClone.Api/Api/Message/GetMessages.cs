@@ -2,6 +2,7 @@
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Message;
@@ -29,6 +30,38 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         await SendOkAsync(result, ct);
     }
 
+    public class MyValidator : Validator<Request>
+    {
+        public MyValidator()
+        {
+            RuleFor(x => x.RoomId)
+                .NotEmpty()
+                .WithMessage("RoomId is required");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .WithMessage("userId is required");
+        }
+    }
+
+    public class Documentation : Summary<GetMessages>
+    {
+        public Documentation()
+        {
+            Summary = "Get all messages";
+            Description = "Get all messages";
+            ExampleRequest = new MessageResponseDto
+            {
+                Content = "Hello World!",
+                Sender = Guid.NewGuid(),
+                Date = DateTime.Now
+            };
+            Response(200, "Got all messages");
+
+            Response<ErrorResponse>(401, "cloud not get all messages");
+            Response<ErrorResponse>(400, "Client side error");
+        }
+    }
 
     public class Request
     {
