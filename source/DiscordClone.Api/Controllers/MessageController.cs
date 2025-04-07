@@ -10,7 +10,7 @@
 //     {
 //         [HttpGet("room/{roomName}")]
 //         [Authorize(Policy = "CanRead")]
-//         public IActionResult GetMessages(string roomName)
+//         public IActionResult GetMessages(string roomName) /getmessages
 //         {
 //             // Retrieve messages from MongoDB
 //             var messages = mongoDbContext.Messages
@@ -21,7 +21,7 @@
 //         
 //         [HttpGet("user/{username}")]
 //         [Authorize(Policy = "CanRead")]
-//         public IActionResult GetMessagesByUser(string username)
+//         public IActionResult GetMessagesByUser(string username) /getmessagesbyuser
 //         {
 //             // Retrieve messages from MongoDB
 //             var messages = mongoDbContext.Messages
@@ -31,7 +31,7 @@
 //         }
 //         
 //         [HttpPost]
-//         public IActionResult AddMessage([FromBody] Message message)
+//         public IActionResult AddMessage([FromBody] Message message) /SendMessage
 //         {
 //             // Store the message in MongoDB
 //             mongoDbContext.Messages.InsertOne(message);
