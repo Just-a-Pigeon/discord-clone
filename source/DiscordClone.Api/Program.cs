@@ -30,7 +30,6 @@ Log.Logger = new LoggerConfiguration()
 builder.Configuration.Bind(config);
 builder.Services.AddSerilog();
 builder.Services.AddCors();
-builder.Services.AddSingleton(typeof(IRequestBinder<>), typeof(UserIdBinder<>));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
@@ -50,13 +49,12 @@ builder.Services.AddDbContext<DiscordCloneContext>(options =>
 });
 
 builder.Services.AddFastEndpoints();
-builder.Services.AddTransient<UserIdRetriever>();
 
 builder.Services
     .SwaggerDocument(o =>
     {
         o.ExcludeNonFastEndpoints = true;
-        o.EnableJWTBearerAuth = false;
+        o.EnableJWTBearerAuth = true;
         o.ShortSchemaNames = true;
         o.MaxEndpointVersion = 1;
         o.DocumentSettings = s =>
@@ -66,6 +64,8 @@ builder.Services
             s.Version = "v1";
         };
     });
+builder.Services.AddSingleton(typeof(IRequestBinder<>), typeof(UserIdBinder<>));
+builder.Services.AddTransient<UserIdRetriever>();
 
 builder.Services.AddAuthentication(options =>
 {

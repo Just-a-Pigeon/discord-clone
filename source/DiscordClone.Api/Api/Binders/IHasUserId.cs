@@ -1,6 +1,6 @@
 ﻿namespace DiscordClone.Api.Api.Binders;
 
-public class IHasUserId
+public interface IHasUserId
 {
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
 }

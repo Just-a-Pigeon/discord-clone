@@ -8,7 +8,10 @@ public class Auth : Group
     {
         Configure("auth", ep =>
         {
-            ep.Description(x => { });
+            ep.Description(x =>
+            {
+                x.AllowAnonymous();
+            });
         });
     }
 }
