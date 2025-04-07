@@ -7,28 +7,65 @@ using DiscordClone.Api.Utils;
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FastEndpoints.OpenTelemetry;
 using FastEndpoints.Swagger;
 using HibernatingRhinos.Profiler.Appender.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
+using Serilog.Sinks.OpenTelemetry;
 using OpenApiServer = NSwag.OpenApiServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var config = new Configuration();
 var configuration = builder.Configuration;
-
-var datasource = DataSourceBuilder.Build(configuration);
+builder.Configuration.Bind(config);
 
 Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration).WriteTo.OpenTelemetry()
+    .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.OpenTelemetry(options =>
+    {
+        options.Protocol = OtlpProtocol.HttpProtobuf;
+    })
     .CreateLogger();
-builder.Configuration.Bind(config);
+
 builder.Services.AddSerilog();
 builder.Services.AddCors();
+builder.Services.AddFastEndpoints();
+builder.Services.AddSingleton(typeof(IRequestBinder<>), typeof(UserIdBinder<>));
+builder.Services.AddTransient<UserIdRetriever>();
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource
+        .AddService("Discord Clone API")
+        .AddAttributes(new List<KeyValuePair<string, object>>
+        {
+            new("Startup", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+            new("AppVersion", "v1"),
+            new("deployment.environment", "development")
+        }))
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation(options =>
+        {
+            options.Filter = context => 
+                !context.Request.Path.StartsWithSegments("/hangfire") && 
+                !context.Request.Path.StartsWithSegments("/health");
+        })
+        .AddEntityFrameworkCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddFastEndpointsInstrumentation()
+        .AddOtlpExporter(options =>
+        {
+            options.Endpoint = new Uri(builder.Configuration["Otlp"]!);
+            options.Protocol = OtlpExportProtocol.HttpProtobuf;
+        }));
+;
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
@@ -37,6 +74,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 
 builder.Services.AddDbContext<DiscordCloneContext>(options =>
 {
+    var datasource = DataSourceBuilder.Build(configuration);
     options.UseNpgsql(datasource);
     options.UseSnakeCaseNamingConvention();
 
@@ -47,24 +85,19 @@ builder.Services.AddDbContext<DiscordCloneContext>(options =>
     }
 });
 
-builder.Services.AddFastEndpoints();
-
-builder.Services
-    .SwaggerDocument(o =>
+builder.Services.SwaggerDocument(o =>
+{
+    o.ExcludeNonFastEndpoints = true;
+    o.EnableJWTBearerAuth = true;
+    o.ShortSchemaNames = true;
+    o.MaxEndpointVersion = 1;
+    o.DocumentSettings = s =>
     {
-        o.ExcludeNonFastEndpoints = true;
-        o.EnableJWTBearerAuth = true;
-        o.ShortSchemaNames = true;
-        o.MaxEndpointVersion = 1;
-        o.DocumentSettings = s =>
-        {
-            s.DocumentName = "Discord Clone API V1";
-            s.Title = "Discord Clone API";
-            s.Version = "v1";
-        };
-    });
-builder.Services.AddSingleton(typeof(IRequestBinder<>), typeof(UserIdBinder<>));
-builder.Services.AddTransient<UserIdRetriever>();
+        s.DocumentName = "Discord Clone API V1";
+        s.Title = "Discord Clone API";
+        s.Version = "v1";
+    };
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -106,8 +139,7 @@ else
     app.UseForwardedHeaders();
 }
 
-app
-    .UseFastEndpoints(c =>
+app.UseFastEndpoints(c =>
     {
         c.Endpoints.RoutePrefix = "api";
         c.Versioning.Prefix = "v";
@@ -129,4 +161,5 @@ app
             });
         };
     });
+
 app.Run();
