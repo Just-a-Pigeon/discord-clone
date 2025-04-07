@@ -1,24 +1,16 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using DiscordClone.Business.ApiServices.Api;
+using DiscordClone.Contract.Rest.Request.Auth;
 using Microsoft.AspNetCore.Mvc;
-using signalRChatMVC.Models;
 using signalRChatMVC.ViewModels;
-using System.Net.Http;
-using System.Security.Policy;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using signalRChatMVC.Services.Interfaces;
 
 namespace signalRChatMVC.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private IApiService _apiService;
+        private readonly IApiService _apiService;
 
         public AuthController(IHttpClientFactory httpClientFactory, IApiService apiService)
         {
@@ -42,12 +34,23 @@ namespace signalRChatMVC.Controllers
         {
             try
             {
-                var token = await _apiService.Login(loginViewModel.Username, loginViewModel.Password);
+                var response = await _apiService.Login(new LoginRequestDto
+                {
+                    Username = loginViewModel.Username,
+                    Password = loginViewModel.Password
+                });
+
+                if (!response.IsSuccessful)
+                {
+                    return Unauthorized();
+                }
+                
+                var token = response.Content.Token.ToString();
                 
                 if (!token.IsNullOrEmpty())
                 {
                     // Store the token securely (e.g., in a cookie or session)
-                    HttpContext.Session.SetString("Token",token);
+                    HttpContext.Session.SetString("Token", token);
                     
                     // Redirect to the home page or a secure area
                     return RedirectToAction("Index", "Home");
@@ -82,34 +85,34 @@ namespace signalRChatMVC.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
-        {
-            try
-            {
-                bool isRegistered = await _apiService.Register(registerViewModel.Username, registerViewModel.Firstname,
-                    registerViewModel.Lastname, registerViewModel.Password, registerViewModel.Email);
-
-                if (isRegistered)
-                {
-                    // Redirect to the home page or a secure area
-                    return RedirectToAction("Login", "Auth");
-                }
-                else
-                {
-                    // You might want to display an error message to the user
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., network issues, server errors)
-                ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
-                return View();
-            }
-        }
+        // [AllowAnonymous]
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        // {
+        //     try
+        //     {
+        //         bool isRegistered = await _apiService.Register(registerViewModel.Username, registerViewModel.Firstname,
+        //             registerViewModel.Lastname, registerViewModel.Password, registerViewModel.Email);
+        //
+        //         if (isRegistered)
+        //         {
+        //             // Redirect to the home page or a secure area
+        //             return RedirectToAction("Login", "Auth");
+        //         }
+        //         else
+        //         {
+        //             // You might want to display an error message to the user
+        //             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        //             return View();
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // Handle exceptions (e.g., network issues, server errors)
+        //         ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
+        //         return View();
+        //     }
+        // }
     }
 }
