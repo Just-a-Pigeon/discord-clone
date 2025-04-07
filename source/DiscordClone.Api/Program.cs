@@ -26,7 +26,6 @@ var datasource = DataSourceBuilder.Build(configuration);
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).WriteTo.OpenTelemetry()
     .CreateLogger();
-
 builder.Configuration.Bind(config);
 builder.Services.AddSerilog();
 builder.Services.AddCors();
