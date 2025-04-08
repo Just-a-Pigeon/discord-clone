@@ -23,8 +23,8 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         var result = messages.Select(m => new MessageResponseDto
         {
             Content = m.Content,
-            Date = m.CreatedOn,
-            Sender = m.Sender
+            CreatedOn = m.CreatedOn,
+            SenderId = m.Sender
         }).ToList();
 
         await SendOkAsync(result, ct);
@@ -53,8 +53,8 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
             ExampleRequest = new MessageResponseDto
             {
                 Content = "Hello World!",
-                Sender = Guid.NewGuid(),
-                Date = DateTime.Now
+                SenderId = Guid.NewGuid(),
+                CreatedOn = DateTime.Now
             };
             Response(200, "Got all messages");
 

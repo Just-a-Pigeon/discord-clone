@@ -2,7 +2,7 @@
 
 public class MessageResponseDto
 {
-    public Guid Sender { get;  set; }
-    public DateTimeOffset Date { get; set; }
+    public Guid SenderId { get;  set; }
+    public DateTimeOffset CreatedOn { get; set; }
     public string Content { get; set; }
 }

@@ -31,8 +31,8 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
         var messages = myMessages.Concat(receiverMessages).OrderBy(m => m.CreatedOn).Select(m => new MessageResponseDto
         {
             Content = m.Content,
-            Date = m.CreatedOn,
-            Sender = m.Sender
+            CreatedOn = m.CreatedOn,
+            SenderId = m.Sender
         }).ToList();
 
         await SendOkAsync(messages, ct);
@@ -62,8 +62,8 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
             ExampleRequest = new MessageResponseDto
             {
                 Content = "Hello World!",
-                Sender = Guid.NewGuid(),
-                Date = DateTime.Now
+                SenderId = Guid.NewGuid(),
+                CreatedOn = DateTime.Now
             };
             Response(200, "Got all messages by user");
 
