@@ -20,7 +20,7 @@ public class Message
         // Required by EFCore
     }
     
-    public static Result<Message, ValidationError> Create(Guid sender, Guid receiver, string content, DateTimeOffset createdOn, MessageType messageType)
+    public static Result<Message, ValidationError> CreateDm(Guid sender, Guid receiver, string content, DateTimeOffset createdOn)
     {
         if (string.IsNullOrWhiteSpace(content))
             return ValidationError.InvalidInput("Contents of a message cannot be empty.", "content");
@@ -33,7 +33,43 @@ public class Message
             Receiver = receiver,
             Content = content,
             CreatedOn = createdOn,
-            Type = messageType,
+            Type = MessageType.PersonalMessage,
+            Edited = false
+        };
+    }
+    
+    public static Result<Message, ValidationError> CreateGroup(Guid sender, Guid receiver, string content, DateTimeOffset createdOn)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+            return ValidationError.InvalidInput("Contents of a message cannot be empty.", "content");
+        if (content.Length > 2000)
+            return ValidationError.InvalidInput("Contents of a message cannot exceed the limit of 2000 characters.", "content");
+        
+        return new Message
+        {
+            Sender = sender,
+            Receiver = receiver,
+            Content = content,
+            CreatedOn = createdOn,
+            Type = MessageType.Group,
+            Edited = false
+        };
+    }
+    
+    public static Result<Message, ValidationError> CreateServer(Guid sender, Guid receiver, string content, DateTimeOffset createdOn)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+            return ValidationError.InvalidInput("Contents of a message cannot be empty.", "content");
+        if (content.Length > 2000)
+            return ValidationError.InvalidInput("Contents of a message cannot exceed the limit of 2000 characters.", "content");
+        
+        return new Message
+        {
+            Sender = sender,
+            Receiver = receiver,
+            Content = content,
+            CreatedOn = createdOn,
+            Type = MessageType.Server,
             Edited = false
         };
     }
