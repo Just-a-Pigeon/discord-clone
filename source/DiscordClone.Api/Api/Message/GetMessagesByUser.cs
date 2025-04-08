@@ -13,7 +13,7 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
 {
     public override void Configure()
     {
-        Get("/messages/{userId:guid}");
+        Get("/user/{userId:guid}");
         Group<Messages>();
     }
 
@@ -34,11 +34,11 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
             Date = m.CreatedOn,
             Sender = m.Sender
         }).ToList();
-        
-        await SendOkAsync(messages,ct);
+
+        await SendOkAsync(messages, ct);
     }
 
-    
+
     public class MyValidator : Validator<Request>
     {
         public MyValidator()
