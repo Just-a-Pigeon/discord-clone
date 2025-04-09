@@ -9,10 +9,8 @@ public class Send : Group
         Configure("messages/send", ep =>
         {
             ep.Description(x =>
-
             {
                 x.RequireAuthorization(); 
-                
             });
         });
     }
