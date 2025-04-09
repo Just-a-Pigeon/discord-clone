@@ -4,6 +4,7 @@ using DiscordClone.Contract.Rest.Response.Message;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
+using DomainMessage = DiscordClone.Domain.Entities.Consultation.Message;
 
 namespace DiscordClone.Api.Api.Message.Send;
 
@@ -18,7 +19,7 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var message =
-            Domain.Entities.Consultation.Message.CreateServer(req.UserId, req.ReceiverId, req.Content, req.CreatedOn);
+            DomainMessage.CreateServer(req.UserId, req.ReceiverId, req.Content, req.CreatedOn);
 
         dbContext.Add(message);
         await dbContext.SaveChangesAsync(ct);
@@ -67,6 +68,6 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
 
     public class Request : SendRequestDto, IHasUserId
     {
-        public Guid UserId { get; set; }
+        [HideFromDocs] public Guid UserId { get; set; }
     }
 }
