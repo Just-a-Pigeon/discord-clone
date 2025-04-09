@@ -11,7 +11,7 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
 {
     public override void Configure()
     {
-        Get("");
+        Get("{roomId:guid}");
         Group<Messages>();
     }
 
