@@ -53,4 +53,11 @@
         <ProjectReference Include="..\DiscordClone.Persistence\DiscordClone.Persistence.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="DiscordClone.Api.nuspec" />
+      <Content Include="DiscordClone.Api.nuspec">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

@@ -79,4 +79,11 @@
       <ProjectReference Include="..\DiscordClone.Business\DiscordClone.Business.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="DiscordClone.Mvc.nuspec" />
+      <Content Include="DiscordClone.Mvc.nuspec">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
