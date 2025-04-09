@@ -21,8 +21,7 @@ public class Message
     public MessageType Type { get; private set; }
 
     private static Result<Message, ValidationError> Create(Guid senderId, Guid receiverId, string content,
-        DateTimeOffset createdOn,
-        MessageType messageType)
+        DateTimeOffset createdOn, MessageType messageType)
     {
         if (string.IsNullOrWhiteSpace(content))
             return ValidationError.InvalidInput("Contents of a message cannot be empty.", "content");

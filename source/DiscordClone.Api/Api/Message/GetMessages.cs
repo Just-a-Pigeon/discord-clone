@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Message;
 
-public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.Request, IList<MessageResponseDto>>
+public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.Request, MessageResponseDto[]>
 {
     public override void Configure()
     {
@@ -24,10 +24,17 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            ReceiverId = m.Receiver
-        }).ToList();
+            SenderId = m.Receiver
+        }).ToArray();
 
         await SendOkAsync(result, ct);
+    }
+
+    public class Request
+    {
+        [HideFromDocs] public Guid UserId { get; set; }
+
+        public required Guid RoomId { get; set; }
     }
 
     public class MyValidator : Validator<Request>
@@ -50,21 +57,14 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         {
             Summary = "Get all messages";
             Description = "Get all messages";
-            ExampleRequest = new Request()
+            ExampleRequest = new Request
             {
-                 RoomId = Guid.NewGuid(),
-                 UserId = Guid.NewGuid(),
+                RoomId = Guid.NewGuid()
             };
             Response(200, "Got all messages");
 
             Response<ErrorResponse>(401, "cloud not get all messages");
             Response<ErrorResponse>(400, "Client side error");
         }
-    }
-
-    public class Request
-    {
-        public Guid UserId { get; set; }
-        public Guid RoomId { get; set; }
     }
 }

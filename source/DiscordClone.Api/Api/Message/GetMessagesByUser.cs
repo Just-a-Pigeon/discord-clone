@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 namespace DiscordClone.Api.Api.Message;
 
 public class GetMessagesByUser(DiscordCloneContext dbContext)
-    : Endpoint<GetMessagesByUser.Request, IList<MessageResponseDto>>
+    : Endpoint<GetMessagesByUser.Request, MessageResponseDto[]>
 {
     public override void Configure()
     {
-        Get("/user/{userId:guid}");
+        Get("/user/{receiverId:guid}");
         Group<Messages>();
     }
 
@@ -32,10 +32,16 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            ReceiverId = m.Receiver
-        }).ToList();
+            SenderId = m.Sender
+        }).ToArray();
 
         await SendOkAsync(messages, ct);
+    }
+
+    public class Request : IHasUserId
+    {
+        public required Guid ReceiverId { get; set; }
+        [HideFromDocs] public Guid UserId { get; set; }
     }
 
 
@@ -61,26 +67,19 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
             {
                 Content = "Hello World!",
                 CreatedOn = DateTimeOffset.UtcNow,
-                ReceiverId = Guid.NewGuid()
+                SenderId = Guid.NewGuid()
             };
 
             Summary = "Get Messages by User";
             Description = "Get all messages by user";
             ExampleRequest = new Request
             {
-                UserId = Guid.NewGuid(),
                 ReceiverId = Guid.NewGuid()
             };
 
-            Response<MessageResponseDto>(200, "Got message by user", example: response);
+            Response(200, "Got message by user", example: response);
             Response<ErrorResponse>(401, "cloud not get all messages");
             Response<ErrorResponse>(400, "Client side error");
         }
-    }
-
-    public class Request : IHasUserId
-    {
-        public Guid ReceiverId { get; set; }
-        public Guid UserId { get; set; }
     }
 }

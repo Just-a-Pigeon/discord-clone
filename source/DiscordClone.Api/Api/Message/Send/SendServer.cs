@@ -26,6 +26,11 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
         await SendOkAsync(ct);
     }
 
+    public class Request : SendRequestDto, IHasUserId
+    {
+        [HideFromDocs] public Guid UserId { get; set; }
+    }
+
     public class MyValidator : Validator<Request>
     {
         public MyValidator()
@@ -36,7 +41,7 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
 
             RuleFor(x => x.ReceiverId)
                 .NotEmpty()
-                .WithMessage("ReceiverId is required");
+                .WithMessage("SenderId is required");
 
             RuleFor(x => x.Content)
                 .NotEmpty()
@@ -56,18 +61,11 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
             {
                 Content = "This is a message send to a server",
                 CreatedOn = DateTimeOffset.Now,
-                ReceiverId = Guid.NewGuid()
+                SenderId = Guid.NewGuid()
             };
             Response(200, "Message was sent to the server");
-
             Response<ErrorResponse>(401, "cloud not sent to server");
             Response<ErrorResponse>(400, "Client side error");
         }
-    }
-
-
-    public class Request : SendRequestDto, IHasUserId
-    {
-        [HideFromDocs] public Guid UserId { get; set; }
     }
 }

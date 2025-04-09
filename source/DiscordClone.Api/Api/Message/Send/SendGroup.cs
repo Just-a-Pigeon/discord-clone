@@ -25,6 +25,11 @@ public class SendGroup(DiscordCloneContext dbContext) : Endpoint<SendGroup.Reque
         await SendOkAsync(ct);
     }
 
+    public class Request : SendRequestDto, IHasUserId
+    {
+        [HideFromDocs] public Guid UserId { get; set; }
+    }
+
     public class MyValidator : Validator<Request>
     {
         public MyValidator()
@@ -35,7 +40,7 @@ public class SendGroup(DiscordCloneContext dbContext) : Endpoint<SendGroup.Reque
 
             RuleFor(x => x.ReceiverId)
                 .NotEmpty()
-                .WithMessage("ReceiverId is required");
+                .WithMessage("SenderId is required");
 
             RuleFor(x => x.Content)
                 .NotEmpty()
@@ -55,18 +60,12 @@ public class SendGroup(DiscordCloneContext dbContext) : Endpoint<SendGroup.Reque
             {
                 Content = "This is a message send to a group",
                 CreatedOn = DateTimeOffset.Now,
-                ReceiverId = Guid.NewGuid()
+                SenderId = Guid.NewGuid()
             };
             Response(200, "message was sent to the group");
 
             Response<ErrorResponse>(401, "cloud not sent the message to the group");
             Response<ErrorResponse>(400, "Client side error");
         }
-    }
-
-
-    public class Request : SendRequestDto, IHasUserId
-    {
-        [HideFromDocs] public Guid UserId { get; set; }
     }
 }

@@ -27,6 +27,11 @@ public class SendDm(DiscordCloneContext dbContext) : Endpoint<SendDm.Request>
         await SendOkAsync(ct);
     }
 
+    public class Request : SendRequestDto, IHasUserId
+    {
+        [HideFromDocs] public Guid UserId { get; set; }
+    }
+
     public class MyValidator : Validator<Request>
     {
         public MyValidator()
@@ -37,7 +42,7 @@ public class SendDm(DiscordCloneContext dbContext) : Endpoint<SendDm.Request>
 
             RuleFor(x => x.ReceiverId)
                 .NotEmpty()
-                .WithMessage("ReceiverId is required");
+                .WithMessage("SenderId is required");
 
             RuleFor(x => x.Content)
                 .NotEmpty()
@@ -57,18 +62,12 @@ public class SendDm(DiscordCloneContext dbContext) : Endpoint<SendDm.Request>
             {
                 Content = "This is a message send to the user dm",
                 CreatedOn = DateTimeOffset.Now,
-                ReceiverId = Guid.NewGuid()
+                SenderId = Guid.NewGuid()
             };
             Response(200, "message was sent to the user dm");
 
             Response<ErrorResponse>(401, "cloud not send the message to user dm");
             Response<ErrorResponse>(400, "Client side error");
         }
-    }
-
-
-    public class Request : SendRequestDto, IHasUserId
-    {
-        [HideFromDocs] public Guid UserId { get; set; }
     }
 }
