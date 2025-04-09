@@ -50,11 +50,10 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         {
             Summary = "Get all messages";
             Description = "Get all messages";
-            ExampleRequest = new MessageResponseDto
+            ExampleRequest = new Request()
             {
-                Content = "Hello World!",
-                ReceiverId = Guid.NewGuid(),
-                CreatedOn = DateTime.Now
+                 RoomId = Guid.NewGuid(),
+                 UserId = Guid.NewGuid(),
             };
             Response(200, "Got all messages");
 
