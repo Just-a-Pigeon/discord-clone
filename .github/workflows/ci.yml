@@ -24,5 +24,8 @@ jobs:
     - name: Make build.sh executable
       run: chmod +x build.sh
 
+    - name: Install mono
+      run: sudo apt-get update && sudo apt-get install -y mono-devel
+
     - name: Run Nuke Build
       run: ./build.sh
