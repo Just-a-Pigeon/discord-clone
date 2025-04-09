@@ -3,16 +3,17 @@ using DiscordClone.Contract.Rest.Response.Message;
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Message;
 
 public class GetMessagesByUser(DiscordCloneContext dbContext)
-    : Endpoint<GetMessagesByUser.Request, IList<MessageResponseDto>>
+    : Endpoint<GetMessagesByUser.Request, MessageResponseDto[]>
 {
     public override void Configure()
     {
-        Get("/messages/{userId:guid}");
+        Get("/user/{receiverId:guid}");
         Group<Messages>();
     }
 
@@ -30,17 +31,55 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
         var messages = myMessages.Concat(receiverMessages).OrderBy(m => m.CreatedOn).Select(m => new MessageResponseDto
         {
             Content = m.Content,
-            Date = m.CreatedOn,
-            Sender = m.Sender
-        }).ToList();
-        
-        await SendOkAsync(messages,ct);
-    }
+            CreatedOn = m.CreatedOn,
+            SenderId = m.Sender
+        }).ToArray();
 
+        await SendOkAsync(messages, ct);
+    }
 
     public class Request : IHasUserId
     {
-        public Guid ReceiverId { get; set; }
-        public Guid UserId { get; set; }
+        public required Guid ReceiverId { get; set; }
+        [HideFromDocs] public Guid UserId { get; set; }
+    }
+
+
+    public class MyValidator : Validator<Request>
+    {
+        public MyValidator()
+        {
+            RuleFor(x => x.ReceiverId)
+                .NotEmpty()
+                .WithMessage("RoomId is required");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .WithMessage("userId is required");
+        }
+    }
+
+    public class Documentation : Summary<GetMessagesByUser>
+    {
+        public Documentation()
+        {
+            var response = new MessageResponseDto
+            {
+                Content = "Hello World!",
+                CreatedOn = DateTimeOffset.UtcNow,
+                SenderId = Guid.NewGuid()
+            };
+
+            Summary = "Get Messages by User";
+            Description = "Get all messages by user";
+            ExampleRequest = new Request
+            {
+                ReceiverId = Guid.NewGuid()
+            };
+
+            Response(200, "Got message by user", example: response);
+            Response<ErrorResponse>(401, "cloud not get all messages");
+            Response<ErrorResponse>(400, "Client side error");
+        }
     }
 }
