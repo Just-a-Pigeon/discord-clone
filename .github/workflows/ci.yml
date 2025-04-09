@@ -22,4 +22,4 @@ jobs:
       run: dotnet restore
 
     - name: Run Nuke Build
-      run: ./build.sh --target Compile
+      run: ./build.sh
