@@ -32,7 +32,7 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            SenderId = m.Sender
+            ReceiverId = m.Sender
         }).ToList();
 
         await SendOkAsync(messages, ct);
@@ -62,7 +62,7 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
             ExampleRequest = new MessageResponseDto
             {
                 Content = "Hello World!",
-                SenderId = Guid.NewGuid(),
+                ReceiverId = Guid.NewGuid(),
                 CreatedOn = DateTime.Now
             };
             Response(200, "Got all messages by user");

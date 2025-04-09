@@ -24,7 +24,7 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            SenderId = m.Sender
+            ReceiverId = m.Sender
         }).ToList();
 
         await SendOkAsync(result, ct);
@@ -53,7 +53,7 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
             ExampleRequest = new MessageResponseDto
             {
                 Content = "Hello World!",
-                SenderId = Guid.NewGuid(),
+                ReceiverId = Guid.NewGuid(),
                 CreatedOn = DateTime.Now
             };
             Response(200, "Got all messages");
