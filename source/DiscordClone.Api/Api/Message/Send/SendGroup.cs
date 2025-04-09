@@ -55,7 +55,7 @@ public class SendGroup(DiscordCloneContext dbContext) : Endpoint<SendGroup.Reque
             {
                 Content = "This is a message send to a group",
                 CreatedOn = DateTimeOffset.Now,
-                SenderId = Guid.NewGuid()
+                ReceiverId = Guid.NewGuid()
             };
             Response(200, "message was sent to the group");
 

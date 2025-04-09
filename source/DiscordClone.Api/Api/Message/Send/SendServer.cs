@@ -56,7 +56,7 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
             {
                 Content = "This is a message send to a server",
                 CreatedOn = DateTimeOffset.Now,
-                SenderId = Guid.NewGuid()
+                ReceiverId = Guid.NewGuid()
             };
             Response(200, "Message was sent to the server");
 

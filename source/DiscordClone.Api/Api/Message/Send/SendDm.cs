@@ -57,7 +57,7 @@ public class SendDm(DiscordCloneContext dbContext) : Endpoint<SendDm.Request>
             {
                 Content = "This is a message send to the user dm",
                 CreatedOn = DateTimeOffset.Now,
-                SenderId = Guid.NewGuid()
+                ReceiverId = Guid.NewGuid()
             };
             Response(200, "message was sent to the user dm");
 
