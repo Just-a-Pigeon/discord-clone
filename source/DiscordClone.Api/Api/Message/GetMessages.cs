@@ -24,7 +24,7 @@ public class GetMessages(DiscordCloneContext dbContext) : Endpoint<GetMessages.R
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            ReceiverId = m.Sender
+            ReceiverId = m.Receiver
         }).ToList();
 
         await SendOkAsync(result, ct);

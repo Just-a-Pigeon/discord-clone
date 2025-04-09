@@ -32,7 +32,7 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
         {
             Content = m.Content,
             CreatedOn = m.CreatedOn,
-            ReceiverId = m.Sender
+            ReceiverId = m.Receiver
         }).ToList();
 
         await SendOkAsync(messages, ct);
@@ -57,16 +57,22 @@ public class GetMessagesByUser(DiscordCloneContext dbContext)
     {
         public Documentation()
         {
-            Summary = "Get Messages by User";
-            Description = "Get all messages by user";
-            ExampleRequest = new MessageResponseDto
+            var response = new MessageResponseDto
             {
                 Content = "Hello World!",
-                ReceiverId = Guid.NewGuid(),
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTimeOffset.UtcNow,
+                ReceiverId = Guid.NewGuid()
             };
-            Response(200, "Got all messages by user");
 
+            Summary = "Get Messages by User";
+            Description = "Get all messages by user";
+            ExampleRequest = new Request
+            {
+                UserId = Guid.NewGuid(),
+                ReceiverId = Guid.NewGuid()
+            };
+
+            Response<MessageResponseDto>(200, "Got message by user", example: response);
             Response<ErrorResponse>(401, "cloud not get all messages");
             Response<ErrorResponse>(400, "Client side error");
         }
