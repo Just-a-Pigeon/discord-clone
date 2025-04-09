@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>AiService</id>
+        <version>1.0.0.1</version>
+        <title>DiscordCloneMVC</title>
+        <authors>Yanick and Jamy</authors>
+        <owners>Yanick and Jamy</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <releaseNotes/>
+        <description>Discord Clone MVC</description>
+        <tags>MVC</tags>
+    </metadata>
+</package>

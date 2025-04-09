@@ -23,4 +23,11 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="DiscordClone.DbMigrator.nuspec" />
+      <Content Include="DiscordClone.DbMigrator.nuspec">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
