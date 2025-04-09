@@ -21,5 +21,8 @@ jobs:
     - name: Restore
       run: dotnet restore
 
+    - name: Make build.sh executable
+      run: chmod +x build.sh
+
     - name: Run Nuke Build
       run: ./build.sh
