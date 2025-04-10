@@ -20,7 +20,7 @@ public class Group
         return string.Join(", ", membersNames);
     }
 
-    public static Result<Group, ValidationError> CreateGroup(Guid leaderId, string name, string imagePath,
+    public static Result<Group, ValidationError> CreateGroup(Guid leaderId, string imagePath,
         List<ApplicationUser> members)
     {
         return new Group
@@ -30,5 +30,22 @@ public class Group
             ImagePath = imagePath,
             Members = members
         };
+    }
+
+    public UnitResult<ValidationError> Update(Guid leaderId, string name, string imagePath,
+        List<ApplicationUser> members)
+    {
+        if (name.Length > 100)
+            return ValidationError.InvalidInput("name of the group cannot exceed the limit of 100 characters.",
+                "name");
+        if (string.IsNullOrWhiteSpace(name))
+            Name = DefaultName(members);
+
+        LeaderId = leaderId;
+        Name = name;
+        ImagePath = imagePath;
+        Members = members;
+
+        return UnitResult.Success<ValidationError>();
     }
 }
