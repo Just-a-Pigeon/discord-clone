@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: discordclone-postgress
+    image: postgres
+    restart: unless-stopped
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=discordclone
+      - POSTGRES_PASSWORD=mysecretpassword
+
+  seq:
+    container_name: seq
+    image: datalust/seq
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 5341:5341
+    environment:
+      - ACCEPT_EULA=Y
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: masstransit/rabbitmq
+    restart: unless-stopped
+    ports: 
+      - 15672:15672
+      - 5672:5672
+
+  solr:
+    container_name: solr
+    image: solr:9
+    restart: unless-stopped
+    ports: 
+      - 8983:8983
+
