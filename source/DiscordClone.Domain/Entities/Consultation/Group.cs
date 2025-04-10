@@ -11,7 +11,7 @@ public class Group
     public Guid GroupId { get; private set; }
     public Guid LeaderId { get; private set; }
     public string Name { get; private set; }
-    public string ImagePath { get; private set; }
+    public string? ImagePath { get; private set; }
     public List<ApplicationUser> Members { get; private set; }
 
     private static string DefaultName(List<ApplicationUser> members)
@@ -27,7 +27,7 @@ public class Group
         {
             LeaderId = leaderId,
             Name = DefaultName(members),
-            ImagePath = imagePath,
+            ImagePath = null,
             Members = members
         };
     }
