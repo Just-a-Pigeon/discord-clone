@@ -2,7 +2,7 @@
 
 namespace DiscordClone.Api.Api.FriendRequest;
 
-public class FriendRequests : Group
+public class FriendRequests : FastEndpoints.Group
 {
     public FriendRequests()
     {

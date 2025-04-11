@@ -2,6 +2,7 @@
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 

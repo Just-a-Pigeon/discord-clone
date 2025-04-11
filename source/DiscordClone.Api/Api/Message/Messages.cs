@@ -2,7 +2,7 @@
 
 namespace DiscordClone.Api.Api.Message;
 
-public class Messages : Group
+public class Messages : FastEndpoints.Group
 {
     public Messages()
     {

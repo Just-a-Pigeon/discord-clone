@@ -2,7 +2,7 @@
 
 namespace DiscordClone.Api.Api.Auth;
 
-public class Auth : Group
+public class Auth: FastEndpoints.Group
 {
     public Auth()
     {

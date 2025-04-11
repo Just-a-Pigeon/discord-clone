@@ -2,7 +2,7 @@
 
 namespace DiscordClone.Api.Api.Account;
 
-public class Accounts : Group
+public class Accounts: FastEndpoints.Group
 {
     public Accounts()
     {

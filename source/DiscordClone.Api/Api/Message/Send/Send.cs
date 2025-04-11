@@ -2,7 +2,7 @@
 
 namespace DiscordClone.Api.Api.Message.Send;
 
-public class Send : Group
+public class Send : FastEndpoints.Group
 {
     public Send()
     {
