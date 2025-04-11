@@ -24,11 +24,6 @@ public class HomeController : Controller
  
     public async Task<IActionResult> Index()
     {
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Login", "Auth");
-        }
-
         return View();
     }
 
