@@ -21,7 +21,10 @@ public class SendServer(DiscordCloneContext dbContext) : Endpoint<SendServer.Req
         var message =
             DomainMessage.CreateServer(req.UserId, req.ReceiverId, req.Content, req.CreatedOn);
 
-        dbContext.Add(message);
+        if (message.IsFailure)
+            ThrowError(message.Error.Reason);
+        
+        dbContext.Add(message.Value);
         await dbContext.SaveChangesAsync(ct);
         await SendOkAsync(ct);
     }

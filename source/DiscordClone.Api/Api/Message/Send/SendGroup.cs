@@ -20,7 +20,10 @@ public class SendGroup(DiscordCloneContext dbContext) : Endpoint<SendGroup.Reque
     {
         var message = DomainMessage.CreateGroup(req.UserId, req.ReceiverId, req.Content, req.CreatedOn);
 
-        dbContext.Add(message);
+        if (message.IsFailure)
+            ThrowError(message.Error.Reason);
+        
+        dbContext.Add(message.Value);
         await dbContext.SaveChangesAsync(ct);
         await SendOkAsync(ct);
     }

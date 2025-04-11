@@ -17,15 +17,20 @@ public class Send(DiscordCloneContext dbContext) : Endpoint<Send.Request>
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var existingFriendship =
-            await dbContext.Friendships.AnyAsync(
-                f => (f.UserId == req.SendTo && f.FriendId == req.UserId) ||
+            await dbContext.Friendships
+                .AnyAsync(f => (f.UserId == req.SendTo && f.FriendId == req.UserId) ||
                      (f.UserId == req.UserId && f.FriendId == req.SendTo), ct);
 
         if (existingFriendship) ThrowError("Friend request already exists");
 
         var friendship = Friendship.Create(req.UserId, req.SendTo);
 
-        dbContext.Add(friendship);
+        if (friendship.IsFailure)
+        {
+            ThrowError(friendship.Error.Reason);
+        }
+        
+        dbContext.Friendships.Add(friendship.Value);
         await dbContext.SaveChangesAsync(ct);
 
         await SendOkAsync(ct);

@@ -15,7 +15,8 @@ public class Accept(DiscordCloneContext dbContext) : Endpoint<Accept.Request>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var friendRequest = await dbContext.Friendships.SingleOrDefaultAsync(f => f.Id == req.FriendshipId && f.FriendId == req.UserId, ct);
+        var friendRequest = await dbContext.Friendships
+            .SingleOrDefaultAsync(f => f.Id == req.FriendshipId && f.FriendId == req.UserId, ct);
         
         if (friendRequest is null)
         {
@@ -27,8 +28,7 @@ public class Accept(DiscordCloneContext dbContext) : Endpoint<Accept.Request>
         
         if (result.IsFailure)
         {
-            await SendErrorsAsync(cancellation: ct);
-            return;
+            ThrowError(result.Error.Reason);
         }
         
         await dbContext.SaveChangesAsync(ct);

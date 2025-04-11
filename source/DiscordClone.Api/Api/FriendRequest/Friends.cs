@@ -1,5 +1,6 @@
 ﻿using DiscordClone.Api.Api.Binders;
 using DiscordClone.Contract.Rest.Response.Friendship;
+using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,8 @@ public class Friends(DiscordCloneContext dbContext) : Endpoint<Friends.Request, 
         var friends = await dbContext.Friendships
             .Include(f => f.Friend)
             .Include(f => f.User)
-            .Where(f => f.UserId == req.UserId || f.FriendId == req.UserId).ToListAsync(ct);
+            .Where(f => f.UserId == req.UserId || (f.FriendId == req.UserId && f.Status == FriendshipStatus.Accepted))
+            .ToListAsync(ct);
 
         var result = friends.Select(f =>
         {
@@ -37,7 +39,6 @@ public class Friends(DiscordCloneContext dbContext) : Endpoint<Friends.Request, 
 
     public class Request : IHasUserId
     {
-        [HideFromDocs]
-        public Guid UserId { get; set; }
+        [HideFromDocs] public Guid UserId { get; set; }
     }
 }
