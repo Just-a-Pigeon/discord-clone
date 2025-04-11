@@ -18,6 +18,9 @@
 
     <ItemGroup>
         <Folder Include="Views\Auth\"/>
+        <Folder Include="wwwroot\client\assets\" />
+        <Folder Include="wwwroot\js\" />
+        <Folder Include="wwwroot\lib\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -67,11 +70,7 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css"/>
-        <UpToDateCheckBuilt Include="tailwind.config.js" Set="Css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -83,5 +82,7 @@
         <Content Include="DiscordClone.Mvc.nuspec">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Remove="Client\index.html" />
+        <Content Include="Client\index.html" />
     </ItemGroup>
 </Project>

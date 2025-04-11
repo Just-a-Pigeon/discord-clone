@@ -1,22 +1,25 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-white">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - DiscordClone.Mvc</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/DiscordClone.Mvc.styles.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true"/>
-    <!-- In your layout or view -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.js"></script>
 
+    <environment include="Local">
+        <link rel="stylesheet" asp-href-include="http://localhost:5000/styles/main.css">
+        <script type="module" src="http://localhost:5000/src/main.ts"></script>
+    </environment>
+
+    <environment include="Production">
+        <link rel="stylesheet" asp-href-include="/client/assets/index-*.css">
+        <script asp-src-include="/client/assets/index-*.js"></script>
+    </environment>
+    <title>@ViewData["Title"] - DiscordClone.Mvc</title>
 </head>
-<body>
+<body class="h-full">
 <header>
     <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo"/>
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Discord Clone</span>
             </a>
             <button data-collapse-toggle="navbar-dropdown" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-dropdown" aria-expanded="false">
@@ -82,24 +85,14 @@
     </nav>
 
 </header>
-<div class="container mx-auto">
-    <main role="main" class="pb-3 h-full">
-        @RenderBody()
-    </main>
-</div>
-
+@RenderBody()
 
 
 <footer class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
-   <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-         &copy; 2024 - DiscordClone.Mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-      </div>
+    <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+        &copy; 2024 - DiscordClone.Mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
 </footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/axios/axios.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
