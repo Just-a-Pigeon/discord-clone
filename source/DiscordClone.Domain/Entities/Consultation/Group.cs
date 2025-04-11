@@ -20,7 +20,7 @@ public class Group
         return string.Join(", ", membersNames);
     }
 
-    public static Result<Group, ValidationError> CreateGroup(Guid leaderId, string imagePath,
+    public static Result<Group, ValidationError> CreateGroup(Guid leaderId,
         List<ApplicationUser> members)
     {
         return new Group
