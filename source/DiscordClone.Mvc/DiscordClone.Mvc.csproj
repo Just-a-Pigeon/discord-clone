@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Middlware\" />
         <Folder Include="Views\Auth\"/>
         <Folder Include="wwwroot\client\assets\" />
         <Folder Include="wwwroot\js\" />
