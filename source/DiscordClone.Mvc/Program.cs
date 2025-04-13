@@ -81,7 +81,7 @@ app.MapControllerRoute(
     );
 app.MapControllerRoute(
     name: "friends",
-    pattern: "{controller=Account}/{action=Index}/{searchTerm?}"
+    pattern: "{controller=Accounts}/{action=Index}/{searchTerm?}"
     
     );
 app.MapControllerRoute(

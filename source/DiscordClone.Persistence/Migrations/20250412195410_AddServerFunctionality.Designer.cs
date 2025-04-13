@@ -4,6 +4,7 @@ using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using DiscordClone.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DiscordClone.Persistence.Migrations
 {
     [DbContext(typeof(DiscordCloneContext))]
-    partial class DiscordCloneContextModelSnapshot : ModelSnapshot
+    [Migration("20250412195410_AddServerFunctionality")]
+    partial class AddServerFunctionality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,7 +339,7 @@ namespace DiscordClone.Persistence.Migrations
                         .HasColumnType("character varying(25)")
                         .HasColumnName("name");
 
-                    b.Property<Guid?>("ParentId")
+                    b.Property<Guid>("ParentId")
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
 
@@ -642,6 +645,8 @@ namespace DiscordClone.Persistence.Migrations
                     b.HasOne("DiscordClone.Domain.Entities.Consultation.ServerEntities.ServerNode", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_server_nodes_server_nodes_parent_id");
 
                     b.HasOne("DiscordClone.Domain.Entities.Consultation.ServerEntities.Server", "Server")

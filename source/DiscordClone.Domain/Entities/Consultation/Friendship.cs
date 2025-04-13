@@ -11,8 +11,8 @@ public class Friendship
     public DateTime DateOfFriendship { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public virtual ApplicationUser User { get; private set; }
-    public virtual ApplicationUser Friend { get; private set; }
+    public virtual ApplicationUser User { get; private set; } = null!;
+    public virtual ApplicationUser Friend { get; private set; } = null!;
 
     // ReSharper disable once UnusedMember.Local
     private Friendship()

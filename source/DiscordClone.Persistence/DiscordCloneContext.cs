@@ -1,4 +1,5 @@
 ﻿using DiscordClone.Domain.Entities.Consultation;
+using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,11 @@ public class DiscordCloneContext(DbContextOptions<DiscordCloneContext> options) 
 {
     public DbSet<Friendship> Friendships { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Server> Servers { get; set; }
+    public DbSet<ServerNode> ServerNodes { get; set; }
+    public DbSet<ServerMember> ServerMembers { get; set; }
+    public DbSet<ServerRole> ServerRoles { get; set; }
+    public DbSet<ServerInviteUrl> ServerInviteUrls { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
