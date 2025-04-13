@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using DiscordClone.Api.Api.Binders;
 using DiscordClone.Api.Configuration;
+using DiscordClone.Api.ServiceBus.Consumers;
 using DiscordClone.Api.Utils;
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
@@ -124,6 +125,7 @@ builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<DeleteMessagesOfDeletedUserConsumer>();
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("discord-clone-api"));
     x.UsingRabbitMq((context, cfg) =>
     {
