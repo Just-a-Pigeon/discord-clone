@@ -1,6 +1,7 @@
 ﻿using DiscordClone.Api.Api.Binders;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using DomainGroup = DiscordClone.Domain.Entities.Consultation;
 
@@ -35,4 +36,39 @@ public class CreateGroup(DiscordCloneContext dbContext) : Endpoint<CreateGroup.R
         public List<Guid> MembersId { get; set; }
         [HideFromDocs] public Guid UserId { get; set; }
     }
+    
+    
+    public class MyValidator : Validator<Request>
+    {
+        public MyValidator()
+        {
+            RuleFor(x => x.MembersId)
+                .NotEmpty()
+                .WithMessage("Members is required");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .WithMessage("userId is required");
+        }
+    }
+    
+    public class Documentation : Summary<CreateGroup>
+    {
+        public Documentation()
+        {
+            
+            Summary = "Create a new group";
+            Description = "Create a new group";
+            ExampleRequest = new Request
+            {
+               MembersId = new List<Guid>(),
+               UserId = Guid.NewGuid(),
+            };
+
+            Response(200, "New group created");
+            Response<ErrorResponse>(401, "Couldn`t create a new group");
+            Response<ErrorResponse>(400, "Client side error");
+        }
+    }
+    
 }
