@@ -1,5 +1,4 @@
 ﻿using DiscordClone.Api.Api.Binders;
-using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +25,13 @@ public class DeleteNode(DiscordCloneContext dbContext) : Endpoint<DeleteNode.Req
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         if (!member.CanManageChannels())
         {
             await SendUnauthorizedAsync(ct);
             return;
         }
-        
+
         var node = await dbContext.ServerNodes
             .SingleOrDefaultAsync(sn => sn.Id == req.NodeId && sn.ServerId == req.ServerId, ct);
 
@@ -41,11 +40,11 @@ public class DeleteNode(DiscordCloneContext dbContext) : Endpoint<DeleteNode.Req
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         dbContext.ServerNodes.Remove(node);
         await dbContext.ServerNodes.ExecuteDeleteAsync(ct);
         await dbContext.SaveChangesAsync(ct);
-        
+
         await SendOkAsync(ct);
     }
 

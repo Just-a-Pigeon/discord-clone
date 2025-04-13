@@ -1,6 +1,5 @@
 ﻿using DiscordClone.Api.Api.Binders;
 using DiscordClone.Contract.Rest.Response.Servers.Invites;
-using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
@@ -23,11 +22,13 @@ public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Req
 
         if (member is null)
             ThrowError("You must be a member to see invites.");
-        
-        var permissions = member.GetPermissions();
-        if (!member.IsOwner && (permissions.ServerPermissions & ServerPermissionServer.ManageServer) == 0)
-            ThrowError("You must be a member to see invites.");
-        
+
+        if (!member.CanManageServer())
+        {
+            await SendForbiddenAsync(ct);
+            return;
+        }
+
         var invites = await dbContext.ServerInviteUrls.Where(siu => siu.ServerId == req.ServerId).ToListAsync(ct);
 
         var result = invites.Select(i => new GetInvitesResponseDto
@@ -37,7 +38,7 @@ public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Req
             Name = i.Name,
             AmountOfUses = i.AmountOfUses,
             Uses = i.Uses,
-            ValidTill = i.ValidTill,
+            ValidTill = i.ValidTill
         }).ToArray();
 
         await SendOkAsync(result, ct);
@@ -58,7 +59,7 @@ public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Req
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()

@@ -14,6 +14,7 @@ public class ServerNode
     public string? ChannelTopic { get; private set; }
     public bool IsPrivate { get; private set; }
     public bool IsAgeRestricted { get; private set; }
+    public bool ReadyToDelete { get; private set; }
     
     public Guid? ParentId { get; private set; }
     public ServerNode? Parent { get; private set; }

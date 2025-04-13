@@ -1,12 +1,11 @@
 ﻿using DiscordClone.Api.Api.Binders;
-using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Members;
 
-public class BanMember(DiscordCloneContext dbContext) : Endpoint<BanMember.Request> 
+public class BanMember(DiscordCloneContext dbContext) : Endpoint<BanMember.Request>
 {
     public override void Configure()
     {
@@ -22,29 +21,31 @@ public class BanMember(DiscordCloneContext dbContext) : Endpoint<BanMember.Reque
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var member = await dbContext.ServerMembers.SingleOrDefaultAsync(sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
+
+        var member =
+            await dbContext.ServerMembers.SingleOrDefaultAsync(
+                sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
         if (member == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var permissions = member.GetPermissions();
-        if (!member.IsOwner && (permissions.GeneralPermissions & ServerPermission.Administrator) == 0 &&
-            (permissions.ServerPermissions & ServerPermissionServer.BanMembers) == 0)
+
+        if (!member.CanBanMembers())
         {
             await SendUnauthorizedAsync(ct);
             return;
         }
-        
-        var memberToBan = await dbContext.ServerMembers.SingleOrDefaultAsync(sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
+
+        var memberToBan =
+            await dbContext.ServerMembers.SingleOrDefaultAsync(
+                sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
         if (memberToBan == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         dbContext.ServerMembers.Remove(memberToBan);
         await dbContext.ServerMembers.ExecuteDeleteAsync(ct);
         server.Banned.Add(memberToBan.User);
@@ -57,7 +58,7 @@ public class BanMember(DiscordCloneContext dbContext) : Endpoint<BanMember.Reque
     {
         public Guid ServerId { get; set; }
         public Guid MemberId { get; set; }
-        [HideFromDocs]
-        public Guid UserId { get; set; }
+
+        [HideFromDocs] public Guid UserId { get; set; }
     }
 }

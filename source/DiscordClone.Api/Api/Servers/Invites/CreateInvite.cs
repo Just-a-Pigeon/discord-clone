@@ -28,27 +28,27 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var member = await dbContext.ServerMembers.SingleOrDefaultAsync(sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
+
+        var member =
+            await dbContext.ServerMembers.SingleOrDefaultAsync(
+                sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
 
         if (member is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var permissions = member.GetPermissions();
 
-        if (!member.IsOwner && (permissions.GeneralPermissions & ServerPermission.Administrator) == 0 &&
-            (permissions.ServerPermissions & ServerPermissionServer.CreateInvites) == 0)
+        if (!member.CanCreateInvites())
         {
             await SendForbiddenAsync(ct);
             return;
         }
-        
+
         var uriParameter = Guid.NewGuid().ToString()[..20];
-        
-        var (_, isFailure, invite, error) = ServerInviteUrl.Create(uriParameter, req.Name ?? uriParameter, req.AmountOfUses, req.ValidTill, req.ServerId);
+
+        var (_, isFailure, invite, error) = ServerInviteUrl.Create(uriParameter, req.Name ?? uriParameter,
+            req.AmountOfUses, req.ValidTill, req.ServerId);
 
         if (isFailure)
             ThrowError(error.Reason);
@@ -60,7 +60,7 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
             UriParameter = invite.UriParameter,
             Name = invite.Name ?? invite.UriParameter,
             AmountOfUses = invite.AmountOfUses,
-            ValidTill = invite.ValidTill,
+            ValidTill = invite.ValidTill
         };
 
         await SendOkAsync(result, ct);
@@ -80,7 +80,7 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()

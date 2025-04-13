@@ -6,5 +6,5 @@ public class CreateNodeRequestDto
     public string Type { get; set; } = null!;
     public bool IsPrivate { get; set; }
     public bool IsAgeRestricted { get; set; }
-    public Guid Parent { get; set; }
+    public Guid? Parent { get; set; }
 }

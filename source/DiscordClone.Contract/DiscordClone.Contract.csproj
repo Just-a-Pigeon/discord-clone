@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <Folder Include="Rest\Request\Accounts\" />
+        <Folder Include="Rest\Request\Servers\Roles\" />
         <Folder Include="Rest\Response\Servers\Members\" />
     </ItemGroup>
 

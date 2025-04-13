@@ -15,6 +15,7 @@ public class Server
     public string? ImagePath { get; private set; }
     public string? Description { get; private set; }
     public string? BannerImagePath { get; private set; }
+    public bool ReadyToDelete { get; private set; }
     public IReadOnlyCollection<ServerNode> ServerNodes { get; private set; } = null!;
     public IReadOnlyCollection<ServerInviteUrl> InviteUrls { get; private set; } = null!;
     public IReadOnlyCollection<ServerRole> Roles { get; private set; } = null!;

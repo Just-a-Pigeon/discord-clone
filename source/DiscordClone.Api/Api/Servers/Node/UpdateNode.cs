@@ -24,13 +24,13 @@ public class UpdateNode(DiscordCloneContext dbContext) : Endpoint<UpdateNode.Req
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         if (!member.CanManageChannels())
         {
             await SendUnauthorizedAsync(ct);
             return;
         }
-        
+
         var node = await dbContext.ServerNodes
             .SingleOrDefaultAsync(sn => sn.Id == req.NodeId && sn.ServerId == req.ServerId, ct);
 
@@ -39,7 +39,7 @@ public class UpdateNode(DiscordCloneContext dbContext) : Endpoint<UpdateNode.Req
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         await SendOkAsync(ct);
     }
 

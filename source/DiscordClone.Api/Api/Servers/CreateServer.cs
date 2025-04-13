@@ -89,15 +89,15 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
         if (isFailureVoiceChannel)
             ThrowError(errorVoiceChannel.Reason);
 
+        await dbContext.ServerNodes.AddAsync(textChannel, ct);
         await dbContext.ServerNodes.AddAsync(voiceChannel, ct);
 
         await dbContext.SaveChangesAsync(ct);
-        
-        
-        
+
+
         await SendOkAsync(new CreateServerResponseDto
         {
-            ServerId = server.Id,
+            ServerId = server.Id
         }, ct);
     }
 
@@ -114,11 +114,30 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.Name)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Name is required");
+        }
+    }
+
+    public class Documentation : Summary<CreateServer>
+    {
+        public Documentation()
+        {
+            Summary = "Update server with a specified id";
+            Description = "Update server with a specified id";
+            ExampleRequest = new Request
+            {
+                Name = "New server",
+                ImageStagedPath = $"/stage/{Guid.NewGuid()}.png",
+            };
+            
+            Response(200, "Server has been created.");
+            Response(400, "Client side error.");
+            Response(401, "User is not permitted to join this server.");
+            Response(404, "Invite, user or server was not found.");
         }
     }
 }

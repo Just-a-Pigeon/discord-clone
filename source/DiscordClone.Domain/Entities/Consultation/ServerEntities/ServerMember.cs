@@ -59,6 +59,19 @@ public class ServerMember
             textChannelPermissionsCombine, voiceChannelPermissionsCombine);
     }
 
+    public bool CanManageServer()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0))
+            return true;
+
+        return false;
+    }
+
     public bool CanManageChannels()
     {
         if (IsOwner)
@@ -66,7 +79,64 @@ public class ServerMember
 
         if (Roles.Any(r =>
                 (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
-                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageChannels) != 0))
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageChannels) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0))
+            return true;
+
+        return false;
+    }
+
+    public bool CanCreateInvites()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.CreateInvites) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0))
+            return true;
+
+        return false;
+    }
+
+    public bool CanBanMembers()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.BanMembers) != 0))
+            return true;
+
+        return false;
+    }
+
+    public bool CanKickMembers()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.KickMembers) != 0))
+            return true;
+
+        return false;
+    }
+
+    public bool CanManageRoles()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageServer) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageRoles) != 0))
             return true;
 
         return false;

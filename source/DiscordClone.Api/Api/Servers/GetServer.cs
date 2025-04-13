@@ -89,7 +89,7 @@ public class GetServer(DiscordCloneContext dbContext) : Endpoint<GetServer.Reque
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()

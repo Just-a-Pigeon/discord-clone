@@ -25,13 +25,13 @@ public class CreateNode(DiscordCloneContext dbContext) : Endpoint<CreateNode.Req
             .Include(s => s.Members)
             .ThenInclude(s => s.Roles)
             .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
-        
+
         if (server == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         var member = server.Members.SingleOrDefault(s => s.UserId == req.UserId);
         if (member == null)
         {
@@ -44,14 +44,17 @@ public class CreateNode(DiscordCloneContext dbContext) : Endpoint<CreateNode.Req
             await SendUnauthorizedAsync(ct);
             return;
         }
-        
+
         var parentNode = server.ServerNodes.SingleOrDefault(s => s.Id == req.Parent);
 
-        if (parentNode == null)
+        if (req.Parent is not null && parentNode is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
+
+        if (parentNode is not null && parentNode.Type != ServerNodeType.Category)
+            ThrowError("Cannot attach to this parent node");
 
         if (!Enum.TryParse(req.Type, out ServerNodeType serverNodeType))
         {
@@ -59,59 +62,19 @@ public class CreateNode(DiscordCloneContext dbContext) : Endpoint<CreateNode.Req
             return;
         }
 
-        ServerNode? serverNode = null;
-        ValidationError? validationError = null;
-        var isFailure = false;
-        
-        switch (serverNodeType)
+        var createServerNodeCommand = new ServerNode.CreateServerNodeCommand
         {
-            case ServerNodeType.Category:
-            {
-                (_, isFailure, serverNode, validationError) = ServerNode.CreateCategory(
-                    new ServerNode.CreateServerNodeCommand
-                    {
-                        Name = req.Name,
-                        Parent = parentNode?.Id,
-                        Server = req.ServerId,
-                        IsPrivate = req.IsPrivate,
-                        IsAgeRestricted = req.IsAgeRestricted,
-                    });
-                break;
-            }
-            case ServerNodeType.Text:
-            {
-                (_, isFailure, serverNode, validationError) = ServerNode.CreateTextChannel(
-                    new ServerNode.CreateServerNodeCommand
-                    {
-                        Name = req.Name,
-                        Parent = parentNode?.Id,
-                        Server = req.ServerId,
-                        IsPrivate = req.IsPrivate,
-                        IsAgeRestricted = req.IsAgeRestricted,
-                    });
-                break;
-            }
-            case ServerNodeType.Voice:
-            {
-                (_, isFailure, serverNode, validationError) = ServerNode.CreateVoiceChannel(
-                    new ServerNode.CreateServerNodeCommand
-                    {
-                        Name = req.Name,
-                        Parent = parentNode?.Id,
-                        Server = req.ServerId,
-                        IsPrivate = req.IsPrivate,
-                        IsAgeRestricted = req.IsAgeRestricted,
-                    });
-                break;
-            }
-            default:
-                ThrowError("Node type not supported");
-                break;
-        }
+            Name = req.Name,
+            Parent = parentNode?.Id,
+            Server = req.ServerId,
+            IsPrivate = req.IsPrivate,
+            IsAgeRestricted = req.IsAgeRestricted
+        };
 
+        var (_, isFailure, serverNode, error) = CreateServerNode(createServerNodeCommand, serverNodeType);
         if (isFailure)
-            ThrowError(validationError.Reason);
-        
+            ThrowError(error.Reason);
+
         dbContext.ServerNodes.Add(serverNode);
         await dbContext.SaveChangesAsync(ct);
 
@@ -123,8 +86,30 @@ public class CreateNode(DiscordCloneContext dbContext) : Endpoint<CreateNode.Req
             IsPrivate = serverNode.IsPrivate,
             IsAgeRestricted = serverNode.IsAgeRestricted
         };
-        
+
         await SendOkAsync(result, ct);
+    }
+
+    private Result<ServerNode, ValidationError> CreateServerNode(
+        ServerNode.CreateServerNodeCommand createServerNodeCommand, ServerNodeType serverNodeType)
+    {
+        switch (serverNodeType)
+        {
+            case ServerNodeType.Category:
+            {
+                return ServerNode.CreateCategory(createServerNodeCommand);
+            }
+            case ServerNodeType.Text:
+            {
+                return ServerNode.CreateTextChannel(createServerNodeCommand);
+            }
+            case ServerNodeType.Voice:
+            {
+                return ServerNode.CreateVoiceChannel(createServerNodeCommand);
+            }
+            default:
+                return ValidationError.InvalidInput("Node type not supported", "type");
+        }
     }
 
     public class Reqeust : CreateNodeRequestDto, IHasUserId

@@ -1,6 +1,5 @@
 ﻿using DiscordClone.Api.Api.Binders;
 using DiscordClone.Contract.Rest.Request.Servers;
-using DiscordClone.Contract.Rest.Response.Accounts;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
@@ -18,18 +17,20 @@ public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var server = await dbContext.Servers.Include(s => s.Members).SingleOrDefaultAsync(s => s.Id == req.ServerId, cancellationToken: ct);
+        var server = await dbContext.Servers.Include(s => s.Members)
+            .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
+        
         if (server == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         var result = server.Update(req.Name, null, null, req.Description, req.UserId);
-        
+
         if (result.IsFailure)
             ThrowError(result.Error.Reason);
-        
+
         await SendOkAsync(ct);
     }
 
@@ -47,7 +48,7 @@ public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()
@@ -60,7 +61,7 @@ public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer
         public Documentation()
         {
             var id = Guid.NewGuid();
-            
+
             Summary = "Update server with a specified id";
             Description = "Update server with a specified id";
             ExampleRequest = new Request
@@ -69,8 +70,7 @@ public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer
                 Image = null,
                 Description = null,
                 BannerImagePath = null,
-                ServerId = id,
-
+                ServerId = id
             };
             Response(200, "Server is updated successfully with a specified id");
         }

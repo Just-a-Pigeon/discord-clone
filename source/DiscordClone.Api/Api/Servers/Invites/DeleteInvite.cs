@@ -1,5 +1,4 @@
 ﻿using DiscordClone.Api.Api.Binders;
-using DiscordClone.Domain.Entities.Consultation.ServerEntities;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
@@ -25,34 +24,36 @@ public class DeleteInvite(DiscordCloneContext dbContext) : Endpoint<DeleteInvite
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var member = await dbContext.ServerMembers.SingleOrDefaultAsync(sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
+
+        var member =
+            await dbContext.ServerMembers.SingleOrDefaultAsync(
+                sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
 
         if (member is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
-        var permissions = member.GetPermissions();
 
-        if (!member.IsOwner && (permissions.GeneralPermissions & ServerPermission.Administrator) == 0)
+        if (!member.CanManageServer())
         {
             await SendForbiddenAsync(ct);
             return;
         }
-        
-        var invite = await dbContext.ServerInviteUrls.SingleOrDefaultAsync(siu => siu.Id == req.InviteId && siu.ServerId == req.ServerId, ct);
+
+        var invite =
+            await dbContext.ServerInviteUrls.SingleOrDefaultAsync(
+                siu => siu.Id == req.InviteId && siu.ServerId == req.ServerId, ct);
 
         if (invite is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
-        
+
         invite.Revoke();
         await dbContext.SaveChangesAsync(ct);
-        
+
         await SendOkAsync(ct);
     }
 
@@ -72,12 +73,12 @@ public class DeleteInvite(DiscordCloneContext dbContext) : Endpoint<DeleteInvite
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
-            
+
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ServerId is required");
-            
+
             RuleFor(x => x.InviteId)
                 .NotNull()
                 .NotEmpty()
