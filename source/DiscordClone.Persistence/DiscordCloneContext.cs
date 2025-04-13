@@ -10,6 +10,7 @@ public class DiscordCloneContext(DbContextOptions<DiscordCloneContext> options) 
 {
     public DbSet<Friendship> Friendships { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Group> Groups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

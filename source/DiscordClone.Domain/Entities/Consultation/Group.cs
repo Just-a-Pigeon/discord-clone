@@ -8,7 +8,7 @@ public class Group
     {
     }
 
-    public Guid GroupId { get; private set; }
+    public Guid Id { get; private set; }
     public Guid LeaderId { get; private set; }
     public string Name { get; private set; }
     public string? ImagePath { get; private set; }
