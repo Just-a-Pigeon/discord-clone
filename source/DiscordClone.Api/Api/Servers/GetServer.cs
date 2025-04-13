@@ -18,12 +18,13 @@ public class GetServer(DiscordCloneContext dbContext) : Endpoint<GetServer.Reque
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var user = dbContext.Users.SingleOrDefault(u => u.Id == req.UserId);
-        var server = await dbContext.Servers.SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
-        var nodes = await dbContext.ServerNodes.Where(sn => sn.Server == server).ToListAsync(ct);
-        var members = await dbContext.ServerMembers
-            .Include(sm => sm.User)
-            .Where(m => m.Server == server)
-            .ToListAsync(ct);
+        var server = await dbContext.Servers
+            .Include(s => s.Members)
+            .ThenInclude(m => m.Roles)
+            .Include(s => s.Members)
+            .ThenInclude(m => m.User)
+            .Include(s => s.ServerNodes)
+            .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
 
         if (server is null)
         {
@@ -44,8 +45,8 @@ public class GetServer(DiscordCloneContext dbContext) : Endpoint<GetServer.Reque
             ImagePath = server.ImagePath,
             Description = server.Description,
             BannerImage = server.BannerImagePath,
-            Nodes = BuildTree(nodes),
-            Members = members.Select(m => new MemberDto
+            Nodes = BuildTree(server.ServerNodes.ToList()),
+            Members = server.Members.Select(m => new MemberDto
             {
                 Id = m.User.Id,
                 Name = m.User.UserName!

@@ -28,4 +28,11 @@ public class MemberDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
+    public IList<RoleDto> Roles { get; set; } = null!;
+}
+
+public class RoleDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
 }
