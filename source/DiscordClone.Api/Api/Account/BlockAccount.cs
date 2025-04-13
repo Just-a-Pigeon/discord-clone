@@ -27,13 +27,13 @@ public class BlockAccount(DiscordCloneContext dbContext) : Endpoint<BlockAccount
 
         if (user == null)
         {
-            await SendErrorsAsync(cancellation: ct);
+            await SendNotFoundAsync(cancellation: ct);
             return;
         }
 
         if (blockedUser == null)
         {
-            await SendErrorsAsync(cancellation: ct);
+            await SendNotFoundAsync(cancellation: ct);
             return;
         }
 
@@ -46,15 +46,17 @@ public class BlockAccount(DiscordCloneContext dbContext) : Endpoint<BlockAccount
         if (user.Friends.Any(f => f.UserId == req.UserId))
         {
             var toRemove = user.Friends.FirstOrDefault(f => f.UserId == req.UserId);
-            dbContext.Remove(toRemove!);
+            dbContext.Friendships.Remove(toRemove!);
+            await dbContext.Friendships.ExecuteDeleteAsync(ct);
         }
 
         if (user.Friends.Any(f => f.FriendId == req.UserId))
         {
             var toRemove = user.Friends.FirstOrDefault(f => f.FriendId == req.UserId);
-            dbContext.Remove(toRemove!);
+            dbContext.Friendships.Remove(toRemove!);
+            await dbContext.Friendships.ExecuteDeleteAsync(ct);
         }
-
+        
         user.BlockedUsers.Add(blockedUser);
         await dbContext.SaveChangesAsync(ct);
 
@@ -95,6 +97,8 @@ public class BlockAccount(DiscordCloneContext dbContext) : Endpoint<BlockAccount
                 BlockedUserId = Guid.NewGuid()
             };
             Response(200, "User is blocked");
+            Response(400, "Client side error");
+            Response(404, "User not found");
         }
     }
 }
