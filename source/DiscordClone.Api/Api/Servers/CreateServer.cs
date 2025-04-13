@@ -9,6 +9,10 @@ using FluentValidation;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: Add consumer to delete all messages
+//TODO: Look for a file system
+//TODO: Hangfire to delete inactive server (0 members)
+//TODO: Add permission validation
 public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer.Request, CreateServerResponseDto>
 {
     public override void Configure()
@@ -19,8 +23,6 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        //TODO: Look for a Image resizer
-        //TODO: Hangfire to delete inactive server (0 members)
         var (_, isFailureServer, server, errorServer) = Server.Create(req.Name, null, req.UserId);
 
         if (isFailureServer)

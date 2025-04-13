@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: Documentation
 public class GetServer(DiscordCloneContext dbContext) : Endpoint<GetServer.Request, GetServerResponseDto>
 {
     public override void Configure()

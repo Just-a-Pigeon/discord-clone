@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Node;
 
+//TODO: Documentation
 public class CreateNode(DiscordCloneContext dbContext) : Endpoint<CreateNode.Reqeust>
 {
     public override void Configure()

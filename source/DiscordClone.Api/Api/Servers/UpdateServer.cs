@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: Documentation
+//TODO: Permission check
 public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer.Request>
 {
     public override void Configure()

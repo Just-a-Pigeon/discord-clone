@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: See who accepted and when? Server insights 
+//TODO: Documentation
 public class AcceptServerInvite(DiscordCloneContext dbContext) : Endpoint<AcceptServerInvite.Request>
 {
     public override void Configure()
@@ -14,7 +16,6 @@ public class AcceptServerInvite(DiscordCloneContext dbContext) : Endpoint<Accept
         Put("invites/{UriParameter}/accept");
     }
 
-    //TODO: See who accepted and when? Server insights 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var invite =

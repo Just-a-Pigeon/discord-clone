@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Invites;
 
+//TODO: Documentation
 public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Request, GetInvitesResponseDto[]>
 {
     public override void Configure()

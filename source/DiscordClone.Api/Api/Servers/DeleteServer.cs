@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: Documentation
+//TODO: Add consumer to delete all messages
 public class DeleteServer(DiscordCloneContext dbContext) : Endpoint<DeleteServer.Request>
 {
     public override void Configure()
@@ -16,7 +18,6 @@ public class DeleteServer(DiscordCloneContext dbContext) : Endpoint<DeleteServer
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        //TODO: Add consumer to delete all messages
         var server = await dbContext.Servers.Include(s => s.Members).ThenInclude(m => m.Roles)
             .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Invites;
 
+//TODO: Documentation
 public class RevokeInvite(DiscordCloneContext dbContext) : Endpoint<RevokeInvite.Request>
 {
     public override void Configure()

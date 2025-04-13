@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Node;
 
+//TODO: Documentation
 public class UpdateNode(DiscordCloneContext dbContext) : Endpoint<UpdateNode.Reqeust>
 {
     public override void Configure()

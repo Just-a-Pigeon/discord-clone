@@ -4,6 +4,7 @@ using FastEndpoints;
 
 namespace DiscordClone.Api.Api.Servers.Roles;
 
+//TODO: Documentation
 public class GetRoles(DiscordCloneContext dbContext) : Endpoint<GetRoles.Request>
 {
     public override void Configure()

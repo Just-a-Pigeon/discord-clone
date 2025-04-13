@@ -4,6 +4,7 @@ using FastEndpoints;
 
 namespace DiscordClone.Api.Api.Servers.Roles;
 
+//TODO: Documentation
 public class UpdateRole(DiscordCloneContext dbContext) : Endpoint<UpdateRole.Request>
 {
     public override void Configure()
@@ -12,7 +13,7 @@ public class UpdateRole(DiscordCloneContext dbContext) : Endpoint<UpdateRole.Req
         Group<Roles>();
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override Task HandleAsync(Request req, CancellationToken ct)
     {
         throw new NotImplementedException();
     }

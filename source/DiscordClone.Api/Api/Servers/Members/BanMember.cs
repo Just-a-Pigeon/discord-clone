@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Members;
 
+//TODO: Documentation
 public class BanMember(DiscordCloneContext dbContext) : Endpoint<BanMember.Request>
 {
     public override void Configure()

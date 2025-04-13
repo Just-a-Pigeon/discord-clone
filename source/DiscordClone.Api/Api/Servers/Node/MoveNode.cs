@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Node;
 
+//TODO: Documentation
+//TODO: Make less complex
 public class MoveNode(DiscordCloneContext dbContext) : Endpoint<MoveNode.Request>
 {
     public override void Configure()

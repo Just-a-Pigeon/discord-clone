@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Invites;
 
+//TODO: Also see who made it, server insights
+//TODO: Documentation
 public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite.Request, CreateInviteResponseDto>
 {
     public override void Configure()
@@ -18,7 +20,6 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
         Group<Invites>();
     }
 
-    //TODO: Also see who made it, server insights
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var server = await dbContext.Servers.SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);

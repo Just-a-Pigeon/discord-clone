@@ -4,6 +4,7 @@ using FastEndpoints;
 
 namespace DiscordClone.Api.Api.Servers.Roles;
 
+//TODO: Documentation
 public class DeleteRole(DiscordCloneContext dbContext) : Endpoint<DeleteRole.Request>
 {
     public override void Configure()

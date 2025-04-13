@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Members;
 
+//TODO: Documentation
 public class KickMember(DiscordCloneContext dbContext) : Endpoint<KickMember.Request>
 {
     public override void Configure()

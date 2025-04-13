@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers.Node;
 
+//TODO: Documentation
 public class DeleteNode(DiscordCloneContext dbContext) : Endpoint<DeleteNode.Reqeust>
 {
     public override void Configure()

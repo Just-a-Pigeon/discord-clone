@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Servers;
 
+//TODO: Documentation
+//TODO: Implement with solr for fuzzy search
 public class GetServers(DiscordCloneContext dbContext) : Endpoint<GetServers.Request, GetServersResponseDto[]>
 {
     public override void Configure()
