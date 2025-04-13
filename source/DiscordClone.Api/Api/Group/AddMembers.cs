@@ -1,6 +1,8 @@
 ﻿using DiscordClone.Api.Api.Binders;
+using DiscordClone.Api.Api.Message;
 using DiscordClone.Persistence;
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordClone.Api.Api.Group;
@@ -41,5 +43,42 @@ public class AddMembers(DiscordCloneContext dbContext) : Endpoint<AddMembers.Req
         public Guid GroupId { get; set; }
         public required List<Guid> MemberIds { get; set; } = null!;
         [HideFromDocs] public Guid UserId { get; set; }
+    }
+    
+    public class MyValidator : Validator<Request>
+    {
+        public MyValidator()
+        {
+            RuleFor(x => x.GroupId)
+                .NotEmpty()
+                .WithMessage("RoomId is required");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty()
+                .WithMessage("userId is required");
+            
+            RuleFor(x => x.MemberIds)
+                .NotEmpty()
+                .WithMessage("MembersIds are required");
+        }
+    }
+
+    public class Documentation : Summary<AddMembers>
+    {
+        public Documentation()
+        {
+            Summary = "Add Members to Group";
+            Description = "Add Members to Group";
+            ExampleRequest = new Request
+            {
+                GroupId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                MemberIds = new List<Guid>()
+            };
+            Response(200, "Added members");
+
+            Response<ErrorResponse>(401, "couldn`t add members");
+            Response<ErrorResponse>(400, "Client side error");
+        }
     }
 }
