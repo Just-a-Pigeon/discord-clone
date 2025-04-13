@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using DiscordClone.Api.Api.Binders;
 using DiscordClone.Api.Configuration;
+using DiscordClone.Api.ServiceBus.Consumers;
 using DiscordClone.Api.Utils;
 using DiscordClone.Domain.Entities.Consultation;
 using DiscordClone.Persistence;
@@ -10,6 +11,7 @@ using FastEndpoints;
 using FastEndpoints.OpenTelemetry;
 using FastEndpoints.Swagger;
 using HibernatingRhinos.Profiler.Appender.EntityFramework;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -120,6 +122,29 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorizationBuilder();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<DeleteMessagesOfDeletedUserConsumer>();
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("discord-clone-api"));
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.UseJsonSerializer();
+        cfg.UseJsonDeserializer();
+        cfg.ConfigureJsonSerializerOptions(o =>
+        {
+            o.PropertyNameCaseInsensitive = true;
+            return o;
+        });
+        
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 
