@@ -12,14 +12,14 @@ public class ServerNode
     public string Name { get; private set; } = null!;
     public ServerNodeType Type { get; private set; }
     public string? ChannelTopic { get; private set; }
-    public bool IsPrivate { get; set; }
-    public bool IsAgeRestricted { get; set; }
+    public bool IsPrivate { get; private set; }
+    public bool IsAgeRestricted { get; private set; }
     
-    public Guid? ParentId { get; set; }
+    public Guid? ParentId { get; private set; }
     public ServerNode? Parent { get; private set; }
-    public Guid ServerId { get; set; }
+    public Guid ServerId { get; private set; }
     public Server Server { get; private set; } = null!;
-    public ICollection<ServerNode> Children { get; set; } = null!;
+    public ICollection<ServerNode> Children { get; private set; } = null!;
 
     public static Result<ServerNode, ValidationError> CreateCategory(CreateServerNodeCommand createCommand)
     {

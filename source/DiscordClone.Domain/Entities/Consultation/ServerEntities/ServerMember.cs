@@ -14,7 +14,7 @@ public class ServerMember
     public Guid ServerId { get; private set; }
     public Server Server { get; private set; } = null!;
     public ICollection<ServerRole> Roles { get; private set; } = null!;
-    
+
 
     public static Result<ServerMember, ValidationError> Create(Guid userId, Guid serverId)
     {
@@ -57,5 +57,18 @@ public class ServerMember
 
         return ServerRolePermissions.Create(generalPermissionsCombine, serverPermissionsCombine,
             textChannelPermissionsCombine, voiceChannelPermissionsCombine);
+    }
+
+    public bool CanManageChannels()
+    {
+        if (IsOwner)
+            return true;
+
+        if (Roles.Any(r =>
+                (r.Permissions.GeneralPermissions & ServerPermission.Administrator) != 0 ||
+                (r.Permissions.ServerPermissions & ServerPermissionServer.ManageChannels) != 0))
+            return true;
+
+        return false;
     }
 }
