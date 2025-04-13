@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
-builder.Services.AddScoped<CustomAuthenticationMiddleware>();
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
@@ -70,9 +69,6 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-app.UseMiddleware<CustomAuthenticationMiddleware>();
-app.MapHub<ChatHub>("/chat");
-app.MapHub<ChatHub>("/chat/chatrooms/{roomid}");
 
 app.MapControllerRoute(
     name: "default",
