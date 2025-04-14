@@ -72,7 +72,7 @@ public class UnBlockAccount(DiscordCloneContext dbContext) : Endpoint<UnBlockAcc
             {
                 UnBlockUserId = Guid.NewGuid()
             };
-            Response(200, "User is blocked");
+            Response(200, "User has been unblocked");
             Response(400, "Client side error");
             Response(404, "User not found");
         }
