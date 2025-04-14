@@ -46,7 +46,7 @@ public class RemoveMembers(DiscordCloneContext dbContext) : Endpoint<RemoveMembe
         [HideFromDocs] public Guid MemberId { get; set; }
         public Guid GroupId { get; set; }
     }
-
+    //test git
     public class MyValidator : Validator<RemoveMembers.Request>
     {
         public MyValidator()
