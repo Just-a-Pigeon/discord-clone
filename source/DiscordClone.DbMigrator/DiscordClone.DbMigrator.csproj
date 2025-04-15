@@ -20,10 +20,23 @@
         <EmbeddedResource Include="Scripts\20250406130619_Init.sql">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
+        <EmbeddedResource Include="Scripts\20250411211618_AddBlockedListToUser.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
         <EmbeddedResource Include="Scripts\20250412195410_AddServerFunctionality.sql">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
         <EmbeddedResource Include="Scripts\20250412203719_SetServerNodeParentIdToNullable.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+<<<<<<< HEAD
+        <EmbeddedResource Include="Scripts\20250412195410_AddServerFunctionality.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Scripts\20250412203719_SetServerNodeParentIdToNullable.sql">
+=======
+        <EmbeddedResource Include="Scripts\20250411211618_AddBlockedListToUser.sql">
+>>>>>>> master
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
     </ItemGroup>

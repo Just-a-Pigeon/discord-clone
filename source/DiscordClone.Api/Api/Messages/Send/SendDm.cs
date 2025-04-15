@@ -4,6 +4,7 @@ using DiscordClone.Contract.Rest.Response.Messages;
 using DiscordClone.Persistence;
 using FastEndpoints;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using DomainMessage = DiscordClone.Domain.Entities.Consultation.Message;
 
 namespace DiscordClone.Api.Api.Messages.Send;
@@ -18,10 +19,27 @@ public class SendDm(DiscordCloneContext dbContext) : Endpoint<SendDm.Request>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
+        var user = await dbContext.Users
+            .Include(u => u.BlockedUsers)
+            .FirstOrDefaultAsync(u => u.Id == req.UserId, ct);
+        var receiver = await dbContext.Users
+            .Include(u => u.BlockedUsers)
+            .FirstOrDefaultAsync(u => u.Id == req.ReceiverId, ct);
+        
+        if (user == null || receiver == null)
+            ThrowError("User/Receiver Not Found");
+        
+        if (user.BlockedUsers.Any(b => b.Id == req.ReceiverId) || 
+            receiver.BlockedUsers.Any(b => b.Id == req.UserId))
+            ThrowError("User/Receiver Not Blocked");
+        
         var message =
             DomainMessage.CreateDm(req.UserId, req.ReceiverId, req.Content, req.CreatedOn);
 
-        dbContext.Add(message);
+        if (message.IsFailure)
+            ThrowError(message.Error.Reason);
+        
+        dbContext.Add(message.Value);
         await dbContext.SaveChangesAsync(ct);
 
         await SendOkAsync(ct);

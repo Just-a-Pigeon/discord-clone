@@ -16,7 +16,10 @@ public class GetAccounts(DiscordCloneContext dbContext) : Endpoint<GetAccounts.R
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var users = await dbContext.Users.ToListAsync(ct);
+        var users = await dbContext.Users
+            .Include(u => u.BlockedUsers.All(b => b.Id != req.UserId))
+            .Skip(req.Page * req.Take).Take(req.Take).ToListAsync(ct);
+        
         var result = users.Select(u => new AccountResponseDto
         {
             Id = u.Id,
@@ -24,13 +27,16 @@ public class GetAccounts(DiscordCloneContext dbContext) : Endpoint<GetAccounts.R
             Firstname = u.FirstName,
             Lastname = u.LastName
         }).ToArray();
-        
+
         await SendOkAsync(result, ct);
     }
 
     public class Request : IHasUserId
     {
-        [HideFromDocs]
-        public Guid UserId { get; set; }
+        [QueryParam] public int Take { get; set; } = 10;
+
+        [QueryParam] public int Page { get; set; } = 0;
+
+        [HideFromDocs] public Guid UserId { get; set; }
     }
 }

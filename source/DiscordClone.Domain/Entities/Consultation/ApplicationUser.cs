@@ -10,5 +10,6 @@ public class ApplicationUser: IdentityUser<Guid>
 
     public virtual ICollection<Friendship> Friends { get; set; } = null!;
     public virtual ICollection<Friendship> FriendOf { get; set; } = null!;
+    public virtual ICollection<ApplicationUser> BlockedUsers { get; set; } = null!;
     public virtual ICollection<ServerMember> ServerMembers { get; set; } = null!;
 }

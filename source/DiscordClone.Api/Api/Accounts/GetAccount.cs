@@ -16,9 +16,17 @@ public class GetAccount(DiscordCloneContext dbContext) : Endpoint<GetAccount.Req
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == req.Id, ct);
+        var user = await dbContext.Users
+            .Include(u => u.BlockedUsers)
+            .FirstOrDefaultAsync(u => u.Id == req.Id, ct);
         
         if (user is null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        if (user.BlockedUsers.Any(b => b.Id == req.UserId))
         {
             await SendNotFoundAsync(ct);
             return;
