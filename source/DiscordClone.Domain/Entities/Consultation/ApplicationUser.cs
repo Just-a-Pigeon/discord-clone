@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DiscordClone.Domain.Entities.Consultation.ServerEntities;
+using Microsoft.AspNetCore.Identity;
 
 namespace DiscordClone.Domain.Entities.Consultation;
 
@@ -10,4 +11,5 @@ public class ApplicationUser: IdentityUser<Guid>
     public virtual ICollection<Friendship> Friends { get; set; } = null!;
     public virtual ICollection<Friendship> FriendOf { get; set; } = null!;
     public virtual ICollection<ApplicationUser> BlockedUsers { get; set; } = null!;
+    public virtual ICollection<ServerMember> ServerMembers { get; set; } = null!;
 }

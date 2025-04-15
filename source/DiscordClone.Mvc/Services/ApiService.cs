@@ -105,7 +105,7 @@ public class ApiService: IApiService
     public async Task<List<UserModel>> GetUsers(string token)
     {
         var client = _httpClientFactory.CreateClient();
-        var endPoint = baseUrl + $"Account";
+        var endPoint = baseUrl + $"Accounts";
 
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 

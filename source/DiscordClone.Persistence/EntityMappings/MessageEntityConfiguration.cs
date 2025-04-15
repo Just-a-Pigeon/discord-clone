@@ -16,5 +16,8 @@ public class MessageEntityConfiguration : IEntityTypeConfiguration<Message>
 
         builder.Property(x => x.Type)
             .HasMaxLength(20);
+
+        builder.HasIndex(x => x.Sender);
+        builder.HasIndex(x => x.Receiver);
     }
 }
