@@ -17,7 +17,11 @@ public class RevokeInvite(DiscordCloneContext dbContext) : Endpoint<RevokeInvite
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var server = await dbContext.Servers.SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
+        var server = await dbContext.Servers
+            .Include(s => s.Members)
+            .ThenInclude(s => s.Roles)
+            .Include(s => s.InviteUrls)
+            .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
 
         if (server is null)
         {
@@ -26,8 +30,7 @@ public class RevokeInvite(DiscordCloneContext dbContext) : Endpoint<RevokeInvite
         }
 
         var member =
-            await dbContext.ServerMembers.SingleOrDefaultAsync(
-                sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
+            server.Members.SingleOrDefault(sm => sm.UserId == req.UserId);
 
         if (member is null)
         {
@@ -41,9 +44,7 @@ public class RevokeInvite(DiscordCloneContext dbContext) : Endpoint<RevokeInvite
             return;
         }
 
-        var invite =
-            await dbContext.ServerInviteUrls.SingleOrDefaultAsync(
-                siu => siu.Id == req.InviteId && siu.ServerId == req.ServerId, ct);
+        var invite = server.InviteUrls.SingleOrDefault(siu => siu.Id == req.InviteId);
 
         if (invite is null)
         {

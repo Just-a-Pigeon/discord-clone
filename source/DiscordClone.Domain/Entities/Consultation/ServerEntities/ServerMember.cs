@@ -27,12 +27,11 @@ public class ServerMember
         };
     }
 
-    public static Result<ServerMember, ValidationError> CreateOwner(Guid userId, Guid serverId)
+    public static Result<ServerMember, ValidationError> CreateOwner(Guid userId)
     {
         return new ServerMember
         {
             UserId = userId,
-            ServerId = serverId,
             IsOwner = true,
             Roles = Array.Empty<ServerRole>()
         };

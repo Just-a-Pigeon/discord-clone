@@ -75,6 +75,9 @@ public class UpdateServer(DiscordCloneContext dbContext) : Endpoint<UpdateServer
                 ServerId = id
             };
             Response(200, "Server is updated successfully with a specified id");
+            Response(400, "Client side error.");
+            Response(401, "Unauthorized");
+            Response(404, "NotFound");
         }
     }
 }

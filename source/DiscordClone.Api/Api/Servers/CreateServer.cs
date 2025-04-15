@@ -112,11 +112,6 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
     {
         public MyValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("UserId is required");
-
             RuleFor(x => x.Name)
                 .NotNull()
                 .NotEmpty()
@@ -128,8 +123,8 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
     {
         public Documentation()
         {
-            Summary = "Update server with a specified id";
-            Description = "Update server with a specified id";
+            Summary = "Create a server";
+            Description = "Create a server";
             ExampleRequest = new Request
             {
                 Name = "New server",
@@ -138,8 +133,8 @@ public class CreateServer(DiscordCloneContext dbContext) : Endpoint<CreateServer
             
             Response(200, "Server has been created.");
             Response(400, "Client side error.");
-            Response(401, "User is not permitted to join this server.");
-            Response(404, "Invite, user or server was not found.");
+            Response(401, "Unauthorized");
+            Response(404, "NotFound");
         }
     }
 }

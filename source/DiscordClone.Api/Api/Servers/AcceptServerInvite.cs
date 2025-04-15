@@ -19,19 +19,21 @@ public class AcceptServerInvite(DiscordCloneContext dbContext) : Endpoint<Accept
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
         var invite =
-            await dbContext.ServerInviteUrls.SingleOrDefaultAsync(siu => siu.UriParameter == req.UriParameter, ct);
+            await dbContext.ServerInviteUrls
+                .Include(siu => siu.Server)
+                .ThenInclude(s => s.Banned)
+                .Include(siu => siu.Server)
+                .ThenInclude(s => s.Members)
+                .SingleOrDefaultAsync(siu => siu.UriParameter == req.UriParameter, ct);
         if (invite == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
 
-        var server = await dbContext.Servers
-            .Include(s => s.Banned)
-            .Include(s => s.Members)
-            .SingleOrDefaultAsync(s => s.Id == invite.ServerId, ct);
+        var server = invite.Server;
 
-        if (server == null || server.Banned.Any(b => b.Id == req.UserId))
+        if (server.Banned.Any(b => b.Id == req.UserId))
         {
             await SendNotFoundAsync(ct);
             return;

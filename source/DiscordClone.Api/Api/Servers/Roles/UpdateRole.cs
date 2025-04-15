@@ -22,7 +22,6 @@ public class UpdateRole(DiscordCloneContext dbContext) : Endpoint<UpdateRole.Req
     {
         public Guid RoleId { get; set; }
         public Guid ServerId { get; set; }
-
         [HideFromDocs] public Guid UserId { get; set; }
     }
 }

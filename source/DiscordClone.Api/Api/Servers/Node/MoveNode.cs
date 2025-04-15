@@ -20,6 +20,8 @@ public class MoveNode(DiscordCloneContext dbContext) : Endpoint<MoveNode.Request
     {
         var member = await dbContext.ServerMembers
             .Include(sm => sm.Roles)
+            .Include(sm => sm.Server)
+            .ThenInclude(s => s.ServerNodes)
             .SingleOrDefaultAsync(sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
 
         if (member is null || member.CanManageChannels())
@@ -28,7 +30,7 @@ public class MoveNode(DiscordCloneContext dbContext) : Endpoint<MoveNode.Request
             return;
         }
 
-        var node = dbContext.ServerNodes.SingleOrDefault(n => n.Id == req.NodeId && n.ServerId == req.ServerId);
+        var node = member.Server.ServerNodes.SingleOrDefault(n => n.Id == req.NodeId);
 
         if (node == null)
         {
@@ -37,7 +39,7 @@ public class MoveNode(DiscordCloneContext dbContext) : Endpoint<MoveNode.Request
         }
 
         var newParentNode =
-            dbContext.ServerNodes.SingleOrDefault(n => n.Id == req.NewParentId && n.ServerId == req.ServerId);
+            member.Server.ServerNodes.SingleOrDefault(n => n.Id == req.NewParentId);
 
         if (req.NewParentId is not null && newParentNode is null)
         {

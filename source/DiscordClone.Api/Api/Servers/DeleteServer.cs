@@ -53,15 +53,24 @@ public class DeleteServer(DiscordCloneContext dbContext) : Endpoint<DeleteServer
     {
         public MyValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("UserId is required");
-
             RuleFor(x => x.ServerId)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ServerId is required");
+        }
+    }
+    
+    public class Documentation : Summary<DeleteServer>
+    {
+        public Documentation()
+        {
+            Summary = "Delete your server";
+            Description = "Delete your server";
+            
+            Response(200, "Server has been successfully deleted.");
+            Response(400, "Client side error.");
+            Response(401, "Unauthorized");
+            Response(404, "NotFound");
         }
     }
 }

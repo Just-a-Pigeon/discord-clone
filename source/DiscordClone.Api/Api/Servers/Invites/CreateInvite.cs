@@ -22,7 +22,9 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var server = await dbContext.Servers.SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
+        var server = await dbContext.Servers.Include(s => s.Members)
+            .ThenInclude(sm => sm.Roles)
+            .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
 
         if (server is null)
         {
@@ -30,9 +32,7 @@ public class CreateInvite(DiscordCloneContext dbContext) : Endpoint<CreateInvite
             return;
         }
 
-        var member =
-            await dbContext.ServerMembers.SingleOrDefaultAsync(
-                sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
+        var member = server.Members.SingleOrDefault(sm => sm.UserId == req.UserId);
 
         if (member is null)
         {

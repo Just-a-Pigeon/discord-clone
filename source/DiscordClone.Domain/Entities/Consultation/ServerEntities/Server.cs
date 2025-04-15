@@ -19,10 +19,9 @@ public class Server
     public IReadOnlyCollection<ServerNode> ServerNodes { get; private set; } = null!;
     public IReadOnlyCollection<ServerInviteUrl> InviteUrls { get; private set; } = null!;
     public IReadOnlyCollection<ServerRole> Roles { get; private set; } = null!;
-    public IReadOnlyCollection<ServerMember> Members { get; } = null!;
+    public IReadOnlyCollection<ServerMember> Members { get; private set; } = null!;
     public ICollection<ApplicationUser> Banned { get; private set; } = null!;
     
-    //TODO: When creating also create template of channels after saving
     public static Result<Server, ValidationError> Create(string name, string? imagePath, Guid ownerId)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -37,7 +36,8 @@ public class Server
         {
             Name = name,
             ImagePath = imagePath,
-            Roles = new List<ServerRole> { ServerRole.CreateDefault() }
+            Roles = new List<ServerRole> { ServerRole.CreateDefault() },
+            Members = new List<ServerMember> { ServerMember.CreateOwner(ownerId).Value },
         };
 
         return server;

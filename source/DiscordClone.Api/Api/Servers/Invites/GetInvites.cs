@@ -18,7 +18,10 @@ public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Req
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var member = await dbContext.ServerMembers.Include(sm => sm.Roles)
+        var member = await dbContext.ServerMembers
+            .Include(sm => sm.Roles)
+            .Include(sm => sm.Server)
+            .ThenInclude(s => s.InviteUrls)
             .SingleOrDefaultAsync(sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
 
         if (member is null)
@@ -30,7 +33,7 @@ public class GetInvites(DiscordCloneContext dbContext) : Endpoint<GetInvites.Req
             return;
         }
 
-        var invites = await dbContext.ServerInviteUrls.Where(siu => siu.ServerId == req.ServerId).ToListAsync(ct);
+        var invites = member.Server.InviteUrls.ToList();
 
         var result = invites.Select(i => new GetInvitesResponseDto
         {

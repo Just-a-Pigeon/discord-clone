@@ -100,6 +100,7 @@ builder.Services.SwaggerDocument(o =>
         s.Version = "v1";
     };
 });
+builder.Services.AddSwaggerGen(o => o.OperationFilter<AddCommonResponses>());
 
 builder.Services.AddAuthentication(options =>
 {

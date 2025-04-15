@@ -19,6 +19,8 @@ public class DeleteNode(DiscordCloneContext dbContext) : Endpoint<DeleteNode.Req
     {
         var member = await dbContext.ServerMembers
             .Include(sm => sm.Roles)
+            .Include(sm => sm.Server)
+            .ThenInclude(s => s.ServerNodes)
             .SingleOrDefaultAsync(sm => sm.UserId == req.UserId && sm.ServerId == req.ServerId, ct);
 
         if (member == null)
@@ -33,8 +35,7 @@ public class DeleteNode(DiscordCloneContext dbContext) : Endpoint<DeleteNode.Req
             return;
         }
 
-        var node = await dbContext.ServerNodes
-            .SingleOrDefaultAsync(sn => sn.Id == req.NodeId && sn.ServerId == req.ServerId, ct);
+        var node = member.Server.ServerNodes.SingleOrDefault(sn => sn.Id == req.NodeId);
 
         if (node == null)
         {

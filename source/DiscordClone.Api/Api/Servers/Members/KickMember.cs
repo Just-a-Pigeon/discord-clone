@@ -16,16 +16,18 @@ public class KickMember(DiscordCloneContext dbContext) : Endpoint<KickMember.Req
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var server = await dbContext.Servers.SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
+        var server = await dbContext.Servers
+            .Include(s => s.Members)
+            .ThenInclude(s => s.Roles)
+            .SingleOrDefaultAsync(s => s.Id == req.ServerId, ct);
+        
         if (server == null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
 
-        var member =
-            await dbContext.ServerMembers.SingleOrDefaultAsync(
-                sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
+        var member = server.Members.SingleOrDefault(sm => sm.UserId == req.UserId);
         if (member == null)
         {
             await SendNotFoundAsync(ct);
@@ -38,9 +40,8 @@ public class KickMember(DiscordCloneContext dbContext) : Endpoint<KickMember.Req
             return;
         }
 
-        var memberToBan =
-            await dbContext.ServerMembers.SingleOrDefaultAsync(
-                sm => sm.ServerId == req.ServerId && sm.UserId == req.UserId, ct);
+        var memberToBan = server.Members.SingleOrDefault(sm => sm.UserId == req.MemberId);
+        
         if (memberToBan == null)
         {
             await SendNotFoundAsync(ct);

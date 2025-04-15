@@ -14,6 +14,7 @@ public class GetServers(DiscordCloneContext dbContext) : Endpoint<GetServers.Req
     public override void Configure()
     {
         Get("");
+        Group<Servers>();
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
@@ -49,6 +50,20 @@ public class GetServers(DiscordCloneContext dbContext) : Endpoint<GetServers.Req
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("UserId is required");
+        }
+    }
+    
+    public class Documentation : Summary<GetServers>
+    {
+        public Documentation()
+        {
+            Summary = "Delete your server";
+            Description = "Delete your server";
+            
+            Response(200, "Server has been successfully deleted.");
+            Response(400, "Client side error.");
+            Response(401, "Unauthorized");
+            Response(404, "NotFound");
         }
     }
 }
